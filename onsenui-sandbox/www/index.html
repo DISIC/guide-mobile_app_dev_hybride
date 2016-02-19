@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css"/>
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css"/>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/onsen/js/onsenui.js"></script>
+    <script>
+      var module = ons.bootstrap('app', ['onsen']);
+      module.controller('AppController', function($scope) { });
+
+      /* Lazy Repeat */
+      module.controller('LazyRepeatController', ['$scope', function($scope) {
+        $scope.LazyRepeatDelegate = {
+          configureItemScope: function(index, itemScope) {
+            itemScope.item = {
+              name: 'Item #' + (index + 1)
+            };
+          },
+          calculateItemHeight: function(index) {
+            return 45;
+          },
+          countItems: function() {
+            return 10000000;
+          },
+          destroyItemScope: function(index, scope) { }
+        };
+      }]);
+
+      /* Pull Hook */
+      module.controller('PullHookController', function ($scope, $timeout, $http) {
+        $scope.items = [];
+        $scope.load = function ($done) {
+            $timeout(function () {
+                $http.jsonp('http://numbersapi.com/random/year?callback=JSON_CALLBACK').success(function (data) {
+                    $scope.items.unshift({
+                        desc: data,
+                        rand: Math.random()
+                    });
+                }).error(function () {
+                    $scope.items.unshift({
+                        desc: 'No data',
+                        rand: Math.random()
+                    });
+                }).finally(function () {
+                    $done();
+                });
+            }, 1000);
+        };
+        $scope.reset = function () {
+            $scope.items.length = 0;
+        };
+    });
+    </script>
+  </head>
+  <body ng-controller="AppController">
+    <ons-navigator animation="slide" var="navi">
+      <ons-page>
+        <ons-toolbar>
+          <div class="center">Onsen UI Accessibility</div>
+        </ons-toolbar>
+        <ons-list>
+          <ons-list-item onclick="navi.pushPage('widgets.html');">Widgets</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('toolbars.html');">Toolbars</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('bottom_toolbar.html');">Bottom toolbar</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('text_tab_bar.html');">Text Tab Bar</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('icon_tab_bar.html');">Icon Tab Bar</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('top_tab_bar_1.html');">Top Tab Bar 1</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('top_tab_bar_2.html');">Top Tab Bar 2</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('lists.html');">Lists</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('text_input.html');">Text input</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('simple_alert.html');">Simple Alert</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('complex_alert.html');">More Complex Alert</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('dynamic_alert.html');">Dynamic Alert</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('dialog.html');">Dialog</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('modal_dialog.html');">Modal Dialog</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('popover.html');">Popover</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('carousel.html');">Carousel</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('lazy_repeat.html');">Lazy Repeat</ons-list-item>
+          <ons-list-item onclick="navi.pushPage('pull_hook.html');">Pull Hook</ons-list-item>
+        </ons-list>
+      </ons-page>
+    </ons-navigator>
+
+    <ons-template id="widgets.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Widgets</div>
+        </ons-toolbar>
+
+        <p>Switch:</p>
+
+        <label class="switch">
+          <input type="checkbox" class="switch__input"/>
+          <div class="switch__toggle"></div>
+        </label>
+
+        <div class="switch">
+          <label for="s1">Bouton</label>
+          <input id="s1" type="checkbox" class="switch__input"/>
+          <div class="switch__toggle"></div>
+        </div>
+
+        <p>Range:</p>
+
+        <input type="range" class="range"/>
+
+        <p>Checkbox:</p>
+
+        <label class="checkbox">
+          <input type="checkbox" checked="checked"/>
+          <div class="checkbox__checkmark"></div>
+          Option
+        </label>
+        <div class="checkbox"> 
+          <label for="cb2" class="checkbox">Option</label>
+          <input id="cb1" type="checkbox" checked="checked"/>
+          <div class="checkbox__checkmark"></div>
+        </div>
+
+        <p>Radio button:</p>
+
+        <label class="radio-button">
+          <input type="radio" name="r" checked="checked">
+          <div class="radio-button__checkmark"></div>
+          Option 1
+        </label><br>
+
+        <div class="radio-button">
+          <label for="rb1">Option 1</label>
+          <input id="rb1" type="radio" name="r" checked="checked">
+          <div class="radio-button__checkmark"></div>
+        </div><br>
+
+        <label class="radio-button">
+          <input type="radio" name="r">
+          <div class="radio-button__checkmark"></div>
+          Option 2
+        </label><br>
+
+        <label class="radio-button">
+          <input type="radio" name="r">
+          <div class="radio-button__checkmark"></div>
+          Option 3
+        </label>
+
+        <p>Segment:</p>
+
+        <div class="button-bar" style="width:280px;">
+          <div class="button-bar__item">
+            <input type="radio" name="segment-a" checked>
+            <button class="button-bar__button">One</button>
+          </div>
+
+          <div class="button-bar__item">
+            <input type="radio" name="segment-a">
+            <button class="button-bar__button">Two</button>
+          </div>
+
+          <div class="button-bar__item">
+            <input type="radio" name="segment-a">
+            <button class="button-bar__button">Three</button>
+          </div>
+        </div>
+
+        <p>Notification counters:
+          <span class="notification">1</span>
+          <span class="notification">10</span>
+          <span class="notification">999</span></p>
+
+        <p>Button: <button class="button">Button</button></p>
+
+        <p>Large button:</p>
+        <button class="button button--large">Button</button>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="toolbars.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Bars</div>
+        </ons-toolbar>
+
+        <p>Button bar:</p>
+
+        <div class="button-bar" style="width:280px;">
+          <div class="button-bar__item">
+            <button class="button-bar__button">One</button>
+          </div>
+
+          <div class="button-bar__item">
+            <button class="button-bar__button">Two</button>
+          </div>
+
+          <div class="button-bar__item">
+            <button class="button-bar__button">Three</button>
+          </div>
+        </div>
+
+        <p>Toolbar:</p>
+
+        <div class="navigation-bar">
+          <div class="navigation-bar__center navigation-bar__title">Toolbar</div>
+        </div>
+
+        <p>Toolbar Buttons:</p>
+
+        <div class="navigation-bar">
+          <div class="navigation-bar__left">
+            <span class="toolbar-button--quiet navigation-bar__line-height">
+              <i class="ion-navicon"
+                 style="font-size:32px; vertical-align:-6px;"></i>
+            </span>
+          </div>
+
+          <div class="navigation-bar__center">
+            Toolbar Buttons
+          </div>
+
+          <div class="navigation-bar__right">
+            <span class="toolbar-button--quiet
+                         navigation-bar__line-height">Label</span>
+          </div>
+        </div>
+
+        <p>Android-like Toolbar:</p>
+
+        <div class="navigation-bar navigation-bar--android">
+          <div class="navigation-bar__left navigation-bar--android__left"></div>
+
+          <div class="navigation-bar__center navigation-bar--android__center
+                      navigation-bar__title navigation-bar--android__title">Toolbar</div>
+
+          <div class="navigation-bar__right navigation-bar--android__right"></div>
+        </div>
+
+        <p>Android-like Toolbar Buttons:<p>
+
+          <div class="navigation-bar navigation-bar--android">
+            <div class="navigation-bar__left navigation-bar--android__left">
+              <span class="toolbar-button navigation-bar__line-height"
+                    style="padding: 0 5px 0 5px;">
+                <i class="ion-android-arrow-back" style="font-size:20px;"></i>
+              </span>
+            </div>
+
+            <div class="navigation-bar__center
+                        navigation-bar--android__center navigation-bar__title">
+              Toolbar
+            </div>
+
+            <div class="navigation-bar__right navigation-bar--android__right">
+              <span class="toolbar-button--quiet navigation-bar__line-height">
+                <i class="ion-android-share" style="font-size:20px;"></i>
+              </span>
+
+              <span class="toolbar-button--quiet navigation-bar__line-height">
+                <i class="ion-android-more-vertical" style="font-size: 26px;"></i>
+              </span>
+            </div>
+          </div>
+
+        <p>Android-like Toolbar Buttons 2:</p>
+
+        <div class="navigation-bar navigation-bar--android">
+          <div class="navigation-bar__left navigation-bar--android__left">
+            <span class="toolbar-button navigation-bar__line-height"
+                  style="padding: 0 5px 0 5px;">
+              <i class="ion-android-arrow-back" style="font-size:20px;"></i>
+            </span>
+          </div>
+
+          <div class="navigation-bar__center navigation-bar--android__center">
+            Toolbar
+          </div>
+
+          <div class="navigation-bar__right navigation-bar--android__right">
+            <span class="toolbar-button--quiet navigation-bar__line-height">
+              <i class="ion-android-star" style="font-size:20px;"></i>
+            </span>
+
+            <span class="toolbar-button--quiet navigation-bar__line-height">
+              <i class="ion-android-search" style="font-size:20px;"></i>
+            </span>
+
+            <span class="toolbar-button--quiet navigation-bar__line-height">
+              <i class="ion-android-more-vertical" style="font-size:26px;"></i>
+            </span>
+          </div>
+        </div>
+
+        <p>Transparent Toolbar:</p>
+
+        <div class="navigation-bar navigation-bar--transparent">
+          <div class="navigation-bar__left">
+            <span class="toolbar-button--quiet navigation-bar__line-height">
+              <i class="ion-navicon"
+                 style="font-size:32px;vertical-align:-6px;"></i>
+            </span>
+          </div>
+
+          <div class="navigation-bar__center">
+            Transparent Toolbar
+          </div>
+
+          <div class="navigation-bar__right">
+            <span class="toolbar-button--quiet
+                         navigation-bar__line-height">Label</span>
+          </div>
+        </div>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="bottom_toolbar.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Bottom toolbar</div>
+        </ons-toolbar>
+        <div class="bottom-bar" style="text-align: center">
+          <div class="bottom-bar__line-height">
+            Bottom Toolbar
+          </div>
+        </div>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="text_tab_bar.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Text tab bar</div>
+        </ons-toolbar>
+        <div class="tab-bar">
+          <label class="tab-bar__item">
+            <input type="radio" name="tab-bar-c" checked="checked">
+            <button class="tab-bar__button">
+              <div class="tab-bar__label">One</div>
+            </button>
+          </label>
+
+          <label class="tab-bar__item">
+            <input type="radio" name="tab-bar-c">
+            <button class="tab-bar__button">
+              <div class="tab-bar__label">Two</div>
+            </button>
+          </label>
+
+          <label class="tab-bar__item">
+            <input type="radio" name="tab-bar-c">
+            <button class="tab-bar__button">
+              <div class="tab-bar__label">Three</div>
+            </button>
+          </label>
+        </div>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="icon_tab_bar.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Icon Tab Bar</div>
+        </ons-toolbar>
+        <div class="tab-bar">
+          <label class="tab-bar__item">
+            <input type="radio" name="tab-bar-b" checked="checked">
+            <button class="tab-bar__button">
+              <i class="tab-bar__icon ion-stop"></i>
+            </button>
+          </label>
+
+          <label class="tab-bar__item">
+            <input type="radio" name="tab-bar-b">
+            <button class="tab-bar__button">
+              <i class="tab-bar__icon ion-record"></i>
+            </button>
+          </label>
+
+          <label class="tab-bar__item">
+            <input type="radio" name="tab-bar-b">
+            <button class="tab-bar__button">
+              <i class="tab-bar__icon ion-star"></i>
+            </button>
+          </label>
+
+          <label class="tab-bar__item">
+            <input type="radio" name="tab-bar-b">
+            <button class="tab-bar__button">
+              <i class="tab-bar__icon ion-ios7-cloud-outline"></i>
+            </button>
+          </label>
+
+          <label class="tab-bar__item">
+            <input type="radio" name="tab-bar-b">
+            <button class="tab-bar__button">
+              <i class="tab-bar__icon ion-ios7-pie"></i>
+            </button>
+          </label>
+        </div>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="top_tab_bar_1.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Top tab bar 1</div>
+        </ons-toolbar>
+        <div class="tab-bar tab-bar--top">
+          <label class="tab-bar__item">
+            <input type="radio" name="top-tab-bar-a" checked="checked">
+            <button class="tab-bar__button">
+              <i class="tab-bar__icon ion-stop"></i>
+            </button>
+          </label>
+
+          <label class="tab-bar__item">
+            <input type="radio" name="top-tab-bar-a">
+            <button class="tab-bar__button">
+              <i class="tab-bar__icon ion-record"></i>
+            </button>
+          </label>
+
+          <label class="tab-bar__item">
+            <input type="radio" name="top-tab-bar-a">
+            <button class="tab-bar__button">
+              <i class="tab-bar__icon ion-star"></i>
+            </button>
+          </label>
+        </div>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="top_tab_bar_2.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Top tab bar 2</div>
+        </ons-toolbar>
+        <div class="tab-bar tab-bar--top tab-bar--top-border">
+          <label class="tab-bar__item tab-bar--top-border__item">
+            <input type="radio" name="top-tab-bar-b" checked="checked">
+            <button class="tab-bar__button tab-bar--top-border__button">
+              Home
+            </button>
+          </label>
+
+          <label class="tab-bar__item tab-bar--top-border__item">
+            <input type="radio" name="top-tab-bar-b">
+            <button class="tab-bar__button tab-bar--top-border__button">
+              Comments
+            </button>
+          </label>
+
+          <label class="tab-bar__item tab-bar--top-border__item">
+            <input type="radio" name="top-tab-bar-b">
+            <button class="tab-bar__button tab-bar--top-border__button">
+              Activity
+            </button>
+          </label>
+        </div>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="lists.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Lists</div>
+        </ons-toolbar>
+
+        <p>List:</p>
+        <ul class="list">
+          <li class="list__item">Item 1</li>
+          <li class="list__item">Item 2</li>
+          <li class="list__item">Item 3</li>
+        </ul>
+
+        <p>Category Header:</p>
+        <ul class="list">
+          <li class="list__header">Header 1</li>
+          <li class="list__item">Item 1</li>
+          <li class="list__header">Header 2</li>
+          <li class="list__item">Item 2</li>
+        </ul>
+
+        <p>Tappale List:</p>
+        <ul class="list">
+          <li class="list__item list__item--tappable">Tappable Item 1</li>
+          <li class="list__item list__item--tappable">Tappable Item 2</li>
+        </ul>
+
+        <p>Chevron:</p>
+
+        <ul class="list">
+          <li class="list__item list__item--chevron">Chevron Item 1</li>
+          <li class="list__item list__item--chevron">Chevron Item 2</li>
+        </ul>
+
+        <p>Inset List:</p>
+
+        <ul class="list list--inset">
+          <li class="list__item list__item--inset">List Item 1</li>
+          <li class="list__item list__item--inset">List Item 2</li>
+        </ul>
+
+        <p>List and Checkbox:</p>
+
+        <ul class="list">
+          <li class="list__item list__item--tappable">
+            <label class="checkbox checkbox--list-item">
+              <input type="checkbox">
+              <div class="checkbox__checkmark
+                          checkbox--list-item__checkmark"></div>
+              Checkbox 1
+            </label>
+          </li>
+
+          <li class="list__item list__item--tappable">
+            <label class="checkbox checkbox--list-item">
+              <input type="checkbox" checked>
+              <div class="checkbox__checkmark
+                          checkbox--list-item__checkmark"></div>
+              Checkbox 2
+            </label>
+          </li>
+        </ul>
+
+        <p>List and Radio Button:</p>
+        <ul class="list">
+          <li class="list__item list__item--tappable">
+            <label class="radio-button radio-button--list-item">
+              <input type="radio" name="b" checked="checked">
+              <div class="radio-button__checkmark
+                          radio-button--list-item__checkmark"></div>
+              Radio Button
+            </label>
+          </li>
+
+          <li class="list__item list__item--tappable">
+            <label class="radio-button radio-button--list-item">
+              <input type="radio" name="b">
+              <div class="radio-button__checkmark
+                          radio-button--list-item__checkmark"></div>
+              Radio Button
+            </label>
+          </li>
+        </ul>
+
+        <p>List and Switch:</p>
+        <ul class="list">
+          <li class="list__item">
+            Label
+            <label class="switch switch--list-item">
+              <input type="checkbox" class="switch__input" checked>
+              <div class="switch__toggle"></div>
+            </label>
+          </li>
+
+          <li class="list__item">
+            Label
+            <label class="switch switch--list-item">
+              <input type="checkbox" class="switch__input">
+              <div class="switch__toggle"></div>
+            </label>
+          </li>
+        </ul>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="text_input.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Text input</div>
+        </ons-toolbar>
+
+        <p>Text input:</p>
+        <label for="z1">Text input:</label>
+        <input id="z1" type="text" class="text-input" placeholder="text" value=""/>
+
+        <p>Underbar Text Input:</p>
+        <label for="z2">Underbar text input:</label>
+        <input id="z2" type="text" class="text-input text-input--underbar"
+               placeholder="underbar text" value=""/>
+
+        <p>Transparent Text Input:</p>
+        <input type="text" class="text-input text-input--transparent"
+               placeholder="transparent text" value=""/>
+
+        <p>Search Input:</p>
+        <label for="z3">Search input:</label>
+        <input id="z3" type="search" class="search-input"
+               placeholder="Search..." style="width: 200px;">
+
+        <p>Textarea:</p>
+        <textarea class="textarea" rows="3" placeholder="Textarea"></textarea>
+
+        <p>Transparent Textarea:</p>
+        <textarea class="textarea textarea--transparent"
+                  rows="3" placeholder="Textarea"></textarea>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="simple_alert.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Simple Alert</div>
+        </ons-toolbar>
+
+        <div class="alert-dialog-mask"></div>
+
+        <div class="alert-dialog">
+          <div class="alert-dialog-title">Alert</div>
+
+          <div class="alert-dialog-content">
+            Hello World!
+          </div>
+
+          <div class="alert-dialog-footer">
+            <button class="alert-dialog-button
+                           alert-dialog-button--primal" onclick="navi.popPage();">OK</button>
+          </div>
+        </div>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="complex_alert.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Complex Alert</div>
+        </ons-toolbar>
+
+        <div class="alert-dialog-mask"></div>
+
+        <div class="alert-dialog">
+          <div class="alert-dialog-title">Alert</div>
+
+          <div class="alert-dialog-content">
+            Hello World!
+          </div>
+
+          <div class="alert-dialog-footer alert-dialog-footer--one">
+
+            <button class="alert-dialog-button
+                           alert-dialog-button--one" onclick="navi.popPage();">Left</button>
+
+            <button class="alert-dialog-button alert-dialog-button--primal
+                           alert-dialog-button--one" onclick="navi.popPage();">Center</button>
+
+            <button class="alert-dialog-button
+                           alert-dialog-button--one" onclick="navi.popPage();">Right</button>
+
+          </div>
+        </div>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </ons-page>
+    </ons-template>
+
+
+    <ons-template id="critical-alert-dialog.html">
+      <ons-alert-dialog var="criticalAlertDialog">
+	<div class="alert-dialog-title"><strong style="color: #ff3333">Critical Alert!</strong></div>
+	<div class="alert-dialog-content">
+	  An error has occurred!
+	</div>
+	<div class="alert-dialog-footer">
+	  <button class="alert-dialog-button" ng-click="criticalAlertDialog.hide();">OK</button>
+	</div>
+      </ons-alert-dialog>
+    </ons-template>
+
+    <ons-template id="dynamic_alert.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Dynamic Alert</div>
+        </ons-toolbar>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <button class="button button--large" onclick="ons.createAlertDialog('critical-alert-dialog.html').then(function(alertDialog) { criticalAlertDialog.show(); });">Show Critical Alert</button>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="dialog.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Dialog</div>
+        </ons-toolbar>
+        <div class="dialog-mask"></div>
+
+        <div class="dialog" style="height: 140px;">
+          <div class="page">
+            <p style="text-align: center;
+                      margin-top: 54px; color: gray;">
+              This is a dialog
+            </p>
+          </div>
+        </div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </ons-page>
+    </ons-template>
+
+    <ons-modal var="modal">
+      <ons-icon icon="ion-load-c" spin="true"></ons-icon>
+      <br/>
+      <br/> Please wait.
+      <br/>Closing in 2 seconds.
+    </ons-modal>
+
+    <ons-template id="modal_dialog.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Modal Dialog</div>
+        </ons-toolbar>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <button class="button button--large" onclick="modal.show(); setTimeout('modal.hide()', 2000);">Open Modal Dialog</button>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="popover.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Popover</div>
+        </ons-toolbar>
+        <div class="popover-mask"></div>
+
+        <div class="popover popover--down" style="top: 20px; left: 165px;">
+          <div class="popover__top-arrow"></div>
+
+          <div class="popover__content">
+            <div style="text-align:center;
+                        opacity: 0.4; margin-top: 40px">This is a popover</div>
+          </div>
+        </div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="carousel.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Carousel</div>
+        </ons-toolbar>
+
+	<ons-carousel style="height: 200px; width: 50%" swipeable="swipeable" overscrollable="overscrollable" auto-scroll="auto-scroll">
+	<ons-carousel-item>
+	  Carousel Item 1
+	</ons-carousel-item>
+	<ons-carousel-item>
+	  Carousel Item 2
+	</ons-carousel-item>
+	<ons-carousel-item>
+	  Carousel Item 3
+	</ons-carousel-item>
+      </ons-carousel>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="lazy_repeat.html">
+      <ons-page ng-controller="LazyRepeatController">
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Lazy Repeat</div>
+        </ons-toolbar>
+	<ons-list>
+	  <ons-list-item ons-lazy-repeat="LazyRepeatDelegate">
+	    {{item.name}}
+	  </ons-list-item>
+	</ons-list>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="pull_hook.html">
+      <ons-page ng-controller="PullHookController">
+        <ons-toolbar>
+          <div class="left"><ons-back-button onclick="navi.popPage();">Back</ons-back-button></div>
+          <div class="center">Pull Hook</div>
+        </ons-toolbar>
+	<ons-pull-hook ng-action="load($done)" var="loader">
+	  <span ng-switch="loader.getCurrentState()">
+            <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+	    <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+	    <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+      </span>
+	</ons-pull-hook>
+	<ons-list>
+	  <ons-list-item ng-show="items.length === 0">
+	    <div class="info">
+              Pull down to fetch items
+	    </div>
+	  </ons-list-item>
+	  <ons-list-item class="item" ng-repeat="item in items">
+	    <ons-row>
+              <ons-col width="80px">
+		<img ng-src="http://lorempixel.com/60/60/?{{item.rand}}" class="item-thum"></img>
+              </ons-col>
+              <ons-col>
+		<p class="item-desc">{{ item.desc }}</p>
+              </ons-col>
+	    </ons-row>
+    </ons-list-item>
+	</ons-list>
+      </ons-page>
+    </ons-template>
+
+  </body>
+</html>

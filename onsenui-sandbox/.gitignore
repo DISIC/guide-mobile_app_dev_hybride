@@ -1,0 +1,8 @@
+node_modules
+platforms/android/
+platforms/firefoxos/
+platforms/ios/
+platforms/platforms.json
+plugins/android.json
+plugins/firefoxos.json
+plugins/ios.json

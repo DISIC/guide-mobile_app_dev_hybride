@@ -1,0 +1,156 @@
+<ion-view view-title="Page de démonstration des composants Ionic">
+  <ion-pane>
+    <ion-header-bar class="bar-stable">
+      <h1 class="title">Forms</h1>
+    </ion-header-bar>
+    <ion-content>
+
+
+
+  <section>
+    <h2>Input Type = Text</h2>
+
+    <h3>No Label</h3>
+
+    <div>
+      Name
+      <br>
+      <input type="text" name="tname" id="tname">
+    </div>
+
+    <h3>Implicit Label Wrapped</h3>
+
+    <div>
+      <label for="tname3">Name
+        <br>
+        <input type="text" name="tname3" id="tname3">
+      </label>
+    </div>
+
+    <h3>Explicit Label</h3>
+
+    <div>
+      <label for="tname4">Name</label>
+      <br>
+      <input type="text" name="tname4" id="tname4">
+    </div>
+
+    <h3>Explicit Label with placeholder</h3>
+
+    <div>
+      <label for="tname4">Name</label>
+      <br>
+      <input type="text" name="tname4" id="tname4" placeholder="Smith">
+    </div>
+  </section>
+
+
+  placeholder-labels
+  <div class="list">
+    <label class="item item-input">
+      <input type="text" placeholder="First Name">
+    </label>
+    <label class="item item-input">
+      <input type="text" placeholder="Last Name">
+    </label>
+    <label class="item item-input">
+      <textarea placeholder="Comments"></textarea>
+    </label>
+  </div>
+
+  inline-labels
+  <div class="list">
+    <label id="Username" class="item item-input">
+      <span class="input-label">Username</span>
+      <input id="Username" type="text">
+    </label>
+    <label id="Password" class="item item-input">
+      <span class="input-label">Password</span>
+      <input id="Password" type="password">
+    </label>
+  </div>
+
+
+  stacked-labels
+  <div class="list">
+    <label for="First" class="item item-input item-stacked-label">
+      <span class="input-label">First Name</span>
+      <input id="First" type="text" placeholder="John">
+    </label>
+    <label for="Last" class="item item-input item-stacked-label">
+      <span class="input-label">Last Name</span>
+      <input id="Last" type="text" placeholder="Suhr">
+    </label>
+    <label for="Email" class="item item-input item-stacked-label">
+      <span class="input-label">Email</span>
+      <input id="Email" type="text" placeholder="john@suhr.com">
+    </label>
+  </div>
+
+
+  floating-labels
+  <div class="list">
+    <label class="item item-input item-floating-label">
+      <span class="input-label">First Name</span>
+      <input type="text" placeholder="First Name">
+    </label>
+    <label class="item item-input item-floating-label">
+      <span class="input-label">Last Name</span>
+      <input type="text" placeholder="Last Name">
+    </label>
+    <label class="item item-input item-floating-label">
+      <span class="input-label">Email</span>
+      <input type="text" placeholder="Email">
+    </label>
+  </div>
+
+
+  inset-forms
+  <div class="list list-inset">
+    <label class="item item-input">
+      <input type="text" placeholder="First Name">
+    </label>
+    <label class="item item-input">
+      <input type="text" placeholder="Last Name">
+    </label>
+  </div>
+
+
+  input-inset
+  <div class="list">
+
+    <div class="item item-input-inset">
+      <label class="item-input-wrapper">
+        <input type="text" placeholder="Email">
+      </label>
+      <button class="button button-small">
+        Submit
+      </button>
+    </div>
+
+  </div>
+
+
+  input-icons
+  <div class="list list-inset">
+    <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="text" placeholder="Search">
+    </label>
+  </div>
+
+
+  bar-inputs
+  <div class="bar bar-header item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search">
+    </label>
+    <button class="button button-clear">
+      Cancel
+    </button>
+  </div>
+
+    </ion-content>
+  </ion-pane>
+</ion-view>

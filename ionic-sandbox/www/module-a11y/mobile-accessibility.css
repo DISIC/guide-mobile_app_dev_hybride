@@ -1,0 +1,4 @@
+.sr-off .sr-on-only ,
+.sr-on .sr-off-only {
+	display: none !important;
+}

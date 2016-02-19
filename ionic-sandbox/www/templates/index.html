@@ -1,0 +1,131 @@
+<ion-view view-title="Page de démonstration des composants Ionic">
+  <ion-pane>
+    <ion-header-bar class="bar-stable">
+      <h1 class="title">Ionic Blank Starter</h1>
+    </ion-header-bar>
+    <ion-content>
+
+      <div ng-controller="DemoController as demo">
+        <p class="sr-on-only">Le lecteur d&apos;&#xE9;cran est actif.</p>
+        <p>Cette page est un bac à sable qui permet d'expérimenter l'accessibilité dans le contexte <span lang="en">Ionic</span>.</p>
+        <h2>ion-checkbox</h2>
+        <ion-checkbox ng-model="isChecked">Checkbox Label</ion-checkbox>
+        <h2>ion-toggle</h2>
+        <ion-toggle-ally ng-model="airplaneMode" toggle-class="toggle-calm">Airplane Mode</ion-toggle-ally>
+        
+        <h2>ion-radio</h2>
+        <br ng-init="choice = &apos;A&apos;">
+        <ion-radio-ally ng-model="choice" ng-value="&apos;A&apos;">Choose A</ion-radio-ally>
+        <ion-radio-ally ng-model="choice" ng-value="&apos;B&apos;">Choose B</ion-radio-ally>
+        <ion-radio-ally ng-model="choice" ng-value="&apos;C&apos;">Choose C</ion-radio-ally>
+
+        <h2>$ionicGesture</h2>
+        <h3>alternative 1</h3>
+        <p>Glisser sur la droite pour supprimer.</p>
+        <button ng-click="demo.archiver()" on-swipe-right="demo.supprimer()" class="button button-large">Archiver</button>
+        <button ng-click="demo.supprimer()" class="sr-only-button button button-large">Supprimer</button>
+
+        <h3>alternative 2</h3>
+        <p>Glisser sur la droite pour supprimer.</p>
+        <button ng-click="demo.archiver()" on-swipe-right="demo.supprimer()" class="button button-large">Archiver</button>
+        <button ng-click="demo.supprimer()" class="sr-only-button show-sr-ios show-sr-android5 button button-large">Supprimer</button>
+
+        <h2>modal</h2>
+        <div ng-controller="ModalController">
+          <script id="my-modal.html" type="text/ng-template">
+            <ion-modal-view data-tap-disabled="true">
+              <ion-header-bar>
+                <h1 class="title">My Modal title</h1>
+              </ion-header-bar>
+              <ion-content>
+                Test modal!
+
+                <button ng-click="closeModal()" class="button button-large button-block button-energized">Fermer</button>
+              </ion-content>
+            </ion-modal-view>
+          </script>
+          <p>
+            <button ng-click="openModal()" class="button button-large">Modal</button>
+          </p>
+
+        </div>
+
+        <h2>PopOver</h2>
+        <div ng-controller="PopoverController">
+          <p>
+            <button class="button button-large" ng-click="openPopover($event)">Open Popover</button>
+          </p>
+
+          <script id="my-popover.html" type="text/ng-template">
+            <ion-popover-view>
+              <ion-header-bar>
+                <h1 class="title">My Popover Title</h1>
+              </ion-header-bar>
+              <ion-content>
+                Hello!
+              </ion-content>
+            </ion-popover-view>
+          </script>
+        </div>
+
+        <h2>Slider</h2>
+        <ion-slide-box class="sr-off-only" on-slide-changed="slideHasChanged($index)">
+          <ion-slide>
+            <div class="box positive-bg"><h2>slide 1<h2></div>
+          </ion-slide>
+          <ion-slide>
+            <div class="box energized-bg"><h2>slide 2<h2></div>
+          </ion-slide>
+          <ion-slide>
+            <div class="box balanced-bg"><h2>slide 3<h2></div>
+          </ion-slide>
+        </ion-slide-box>
+        <ul class="sr-on-only">
+          <li><h2>slide 1<h2></li>
+          <li><h2>slide 2<h2></li>
+          <li><h2>slide 3<h2></li>
+        </ul>
+
+        <h3>Action Sheet</h3>
+        <div ng-controller="ActionSheetController">
+          <button ng-click="show()" class="button button-positive">
+            Action Sheet
+          </button>
+        </div>
+
+        <h3>Action Sheet hybride</h3>
+        <div ng-controller="ActionSheet2Controller">
+          <button ng-click="show()" class="button button-positive">
+            Action Sheet
+          </button>
+        </div>
+
+        <h3>Spinner Dialog</h3>
+        <div ng-controller="SpinnerDialogController">
+          <button ng-click="show()" class="button button-positive">
+            Spinner Dialog
+          </button>
+        </div>
+
+        <h3>Toast</h3>
+        <div ng-controller="ToastController">
+          <button ng-click="show()" class="button button-positive">
+            Toast
+          </button>
+          <button ng-click="showShortTop()" class="button button-positive">
+            ShowShortTop
+          </button>
+          <button ng-click="showLongBottom()" class="button button-positive">
+            ShowLongBottom
+          </button>
+        </div>
+
+        <h3>Navigation</h3>
+        <a class="button button-positive" href="#/app/navigation1">Navigation</a>
+
+        <h3>Forms</h3>
+        <a class="button button-positive" href="#/forms">Forms</a>
+      </div>
+    </ion-content>
+  </ion-pane>
+</ion-view>

@@ -1,0 +1,91 @@
+.platform-ios.sr-on .scroll-content{
+	overflow-y: auto;
+}
+
+.platform-ios.sr-on .pane,
+.platform-ios.sr-on .scroll-content{
+	position: static;
+}
+
+.scroll-content.has-header > .scroll {
+	margin-top: 44px;
+}
+
+/*
+strange bug sometime on iOs with VoiceOver and position static
+.sr-on [nav-view-transition="ios"][nav-view-direction="forward"],
+.sr-on [nav-view-transition="ios"][nav-view-direction="back"] {
+  background-color: transparent;
+}
+*/
+
+
+body .toggle input,
+body .checkbox.checkbox-input-hidden input {
+	display: block !important;
+}
+
+/*
+Only display content to screen readers
+See: http://a11yproject.com/posts/how-to-hide-content/
+*/
+
+.sr-only,
+.sr-only-button,
+.toggle input,
+.checkbox.checkbox-input-hidden input,
+.item-radio input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0,0,0,0);
+	border: 0;
+}
+
+.platform-android5.sr-on .show-sr-android5,
+.platform-ios.sr-on .show-sr-ios,
+.sr-only-button:active,
+.sr-only-button:focus{
+	position: relative;
+	width: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	clip: auto;
+
+	/*
+	css button
+	*/
+	border-color: #b2b2b2;
+	border-style: solid;
+	border-radius: 2px;
+	border-width: 1px;
+	padding: 0 12px;
+	min-width: 52px;
+	min-height: 47px;
+}
+
+.item-toggle{
+	pointer-events: auto;
+}
+
+.item-radio input {
+	left: 0;
+}
+
+/*
+.item-content.ally-current{
+	font-weight: bold;
+}
+
+.sr-on #navId{
+	display: none;
+}
+
+.menu-open #navId{
+	display: block;
+}
+*/
