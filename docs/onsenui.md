@@ -121,7 +121,7 @@ Mettre en oeuvre une telle implémentation demande de revoir significativement l
 
 ## Détection des gestes (ons-gesture-detector)
 
-Nous nous basons ici sur les critères présents dans la proposition d'extension du RGAA pour les mobiles/tactiles (voir https://github.com/DISIC/referentiel-mobile-tactile/blob/master/refentiel-mobile-tactile-liste-criteres.md ).
+Nous nous basons ici sur [les critères présents dans la proposition d'extension du RGAA pour les mobiles/tactiles](https://github.com/DISIC/referentiel-mobile-tactile/blob/master/refentiel-mobile-tactile-liste-criteres.md).
 
 Le critère 14.3 comporte le test suivant&nbsp;:
 
@@ -168,4 +168,4 @@ Si vous souhaitez faire une application <span lang="en">Android</span>, il est t
 De manière générale, <span lang="en">OnsenUI</span> n'est pas recommandable pour créer une application accessible. Il est préférable d'utiliser Cordova et de créer sa propre application.
 
 ## Licence
-Ce document est la propriété du Secrétariat général à la modernisation de l'action publique français (SGMAP). Il est placé sous la [licence ouverte 1.0 ou ultérieure](http://wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence), équivalente à une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternité, ajouter un lien vers la version originale du document disponible sur le [compte <span lang="en">Github</span> de la DInSIC](https://github.com/DISIC).
+Ce document est la propriété du Secrétariat général à la modernisation de l'action publique français (SGMAP). Il est placé sous la [licence ouverte 1.0 ou ultérieure](https://www.etalab.gouv.fr/licence-ouverte-open-licence), équivalente à une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternité, ajouter un lien vers la version originale du document disponible sur le [compte <span lang="en">Github</span> de la DInSIC](https://github.com/DISIC).
