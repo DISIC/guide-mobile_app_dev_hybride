@@ -1,40 +1,40 @@
-En premier lieu nous allons présenter Cordova et ngCordova pour bien les différencier. Nous verrons comment ajouter des plugins dans notre application et comment cela peut interférer avec l'accessibilité de l'application.
+First we will introduce Cordova and ngCordova to ensure their differences are understood. We will see how to add plugins in our app and how this can interfere with its accessibility.
 
 
 # Cordova v5.0.0
 
+Cordova allows creating native apps using HTML, CSS and JavaScript. These apps can then be distributed on mobile app stores. It is possible to add plugins to interact natively with the mobile (RFID reader, alarms, notifications...), all interactions that are mostly impossible from a mobile website.
 
-Cordova vous permet la création d'applications natives en utilisant <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> et <span lang="en">JavaScript</span>. Les applications peuvent être ainsi distribuées sur les <span lang="en">app stores</span> mobiles. Il est possible d'ajouter des <span lang="en">plugins</span> pour interagir nativement avec le mobile (Lecteur RFID, alarmes, notifications…), ces interactions sont pour la plupart impossibles depuis du mobile web.
+Cordova encapsulates the web app in a native WebView container. A native WebView container can be assimilated to a browser without an address bar, which means that Cordova supports most of the functions of mobile browsers. Much of the mobile web accessibility rules apply to development under Cordova.
 
-Cordova encapsule l'application web dans un conteneur WebView natif. Un conteneur WebView natif peut être assimilé à un navigateur sans barre d'adresse, ce qui veut dire que Cordova supporte la plupart des fonctions des navigateurs mobiles. Une grande partie des règles d'accessibilité web mobile s'applique au développement sous Cordova.
+In particular, these rules are shared by both domains:
 
-Les règles communes avec l'accessiblité web sont&nbsp;:
-* Utiliser un ordre logique de lecture&nbsp;;
-* Ajouter des alternatives sur les images si nécessaire&nbsp;;
-* Utiliser la bonne sémantique web&nbsp;;
-* Gérer correctement le focus&nbsp;;
-* Utiliser un contraste suffisant pour le texte&nbsp;.
+* Use logical reading order;
+* Add alternatives to images if necessary;
+* Use appropriate semantics;
+* Manage the focus correctly;
+* Use sufficient contrast for text.
 
-D'une manière générale il faut suivre les [critères du <abbr title="Référentiel général d'accessibilité pour les administrations">RGAA</abbr> 3](http://references.modernisation.gouv.fr/rgaa/criteres.html) étendu par la [liste des critères spécifiques aux plateformes mobiles/tactiles](https://github.com/DISIC/referentiel-mobile-tactile/blob/master/refentiel-mobile-tactile-liste-criteres.md).
+In general, it is necessary to follow the criteria of [<abbr lang="fr" title="Référentiel général d'accessibilité pour les administrations">RGAA</abbr> 3](https://disic.github.io/rgaa_referentiel_en/criteria.html) extended by the [list of criteria specific to mobile / tactile platforms](https://github.com/DISIC/referentiel-mobile-tactile/blob/en/mobile-touch-guidelines-criteria.md).
 
-La difficulté de l'accessiblité mobile web est que l'ensemble des gestes sont interceptés par le lecteur d'écran. En effet le <span lang="en">swipe</span> vers la droite avec le lecteur d'écran permet de passer à l'élément suivant, et n'enverra aucun événement `touch`. Certains motifs de conception <abbr title="Accessible Rich Internet Applications" lang="en">WAI-ARIA</abbr> ne sont pas adaptés au mobile. En effet, il n'y a pas de clavier physique sur le mobile, seulement l'événement `click`. Par conséquent, il n'est pas possible d'augmenter la valeur d'un <span lang="en">slider</span> ou encore d'ouvrir un <span lang="en">treeview</span> sans flèche de droite.
-Ce qui invalide certains motifs de conception <abbr title="Accessible Rich Internet Applications" lang="en">WAI-ARIA</abbr>, [voir la liste](https://github.com/w3c/aria/issues/60).
+The difficulty with mobile web accessibility is that all the gestures are intercepted by the screen reader. The swipe to the right with the screen reader lets you move to the next item, and will not send any `touch` event. Some WAI-ARIA design patterns are not mobile-friendly. Indeed, on devices that only have a touch screen, and no physical keyboard, only the `click` event is available. Patterns like `slider` and `treeview`, that require the use of the right arrow key, cannot be applied.
+This invalidates some WAI-ARIA design patterns, [see list here](https://github.com/w3c/aria-practices/issues/8).
 
 ## ngCordova v0.1.17-alpha
 
-ngCordova a été créé par l'équipe <span lang="en">Ionic</span> pour enrichir votre application <span lang="en">AngularJs</span> en appelant directement les <span lang="en">plugins</span> Cordova les plus répandus.
-Un <span lang="en">plugin</span> Cordova vous permettra ainsi d'effectuer des interactions natives avec le mobile depuis le code Javascript.
+ngCordova was created by the Ionic team to enhance your AngularJs app by calling the Cordova plugins most commonly used.
+A Cordova plugin will allow you to code native interactions with the device from your JavaScript code.
 
-## Création d'une application accessible avec ngCordova
+## Creating an accessible app with ngCordova
 
-### Installation de ngCordova
-On peut facilement installer ngCordova via <span lang="en">bower</span>.
+### Installing ngCordova
+You can easily install ngCordova with bower.
 
 ```shell
 bower install ngCordova
 ```
 
-Ensuite, il suffit d'ajouter le script dans le fichier index.html
+Then, just add the script to the index.html file
 
 ```html
 <!DOCTYPE html>
@@ -49,39 +49,40 @@ Ensuite, il suffit d'ajouter le script dans le fichier index.html
 </html>
 ```
 
-Et d'injecter le module <span lang="en">AngularJs</span> dans notre application.
+Then inject the AngularJs module into our app.
 
 ```javascript
 angular.module('myApp', ['ngCordova'])
 ```
 
-Nous avons accès à une multitude de <span lang="en">wrappers</span> <span lang="en">AngularJs</span> pour nos <span lang="en">plugins</span> Cordova. Chaque <span lang="en">plugin</span> Cordova va maintenant être installé unitairement. De cette façon, nous démarrons avec une application assez légère qui va s'enrichir petit à petit de nouvelles fonctionnalités.
-[Liste des plugins ngCordova](http://ngcordova.com/docs/plugins/)
+We have access to a multitude of AngularJs wrappers for our Cordova plugins. Each Cordova plugin will now be installed one by one. This way, we start with a fairly light app that will gradually grow with new features.
+[List of ngCordova plugins](http://ngcordova.com/docs/plugins/)
 
-### Les plugins ngCordova
+### The ngCordova plugins
 
-Pour créer une application accessible avec ngCordova, nous avons le choix entre plusieurs <span lang="en">plugins</span>. Pour simplifier, les <span lang="en">plugins</span> peuvent être regroupés en 2 catégories&nbsp;:
-* Les <span lang="en">plugins</span> offrant des services (Base de données locale, Géolocalisation, Google Analytics…) qui ne souffriront pas de problèmes d'accessibilité
-* Les <span lang="en">plugins</span> d'interfaces utilisateurs (ActionSheet, Notification, Dialogs…) qui doivent être audités pour valider leurs accessibilité.
+To create an accessible app with ngCordova, we have the choice between several plugins. For simplicity, plugins can be grouped into 2 categories:
 
-Malheureusement, il ne sera pas possible de corriger l'accessiblité du <span lang="en">plugin</span> d'interface utilisateur depuis l'application <span lang="en">JavaScript</span>, ce qui rendra souvent le <span lang="en">plugin</span> inutilisable tant que l'anomalie n'aura pas été corrigée dans le <span lang="en">plugin</span> d'origine.
+* plugins offering services (local database, geolocation, Google Analytics...) that will not have impact on accessibility;
+* plugins for user interfaces (ActionSheet, Notification, Dialogs...) which must be audited to validate their accessibility.
+
+Unfortunately, it will not be possible to fix the user interface's plugin accessibility from the JavaScript code, which will often make the plugin unusable until the bug is fixed in the original plugin.
 
 #### $cordovaActionSheet v1.1.7
 
-$cordovaActionSheet diffère complètement de $ionicActionSheet. $cordovaActionSheet est appelé en JavaScript et utilise soit `UIActionSheet` pour <span lang="en">iOS</span> soit `AlertDialog` pour Android. $ionicActionSheet est une implémentation entièrement faite en <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>, <span lang="en">JavaScript</span> et <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>. En utilisant $cordovaActionSheet, on garde un avantage en appellant des motifs de conception natifs dans chacun des OS.
+$cordovaActionSheet is totally different from $ionicActionSheet. $cordovaActionSheet is called in JavaScript and uses either `UIActionSheet` for iOS or `AlertDialog` for Android. $ionicActionSheet is entirely based on HTML, JavaScript and CSS. Using $cordovaActionSheet gives you the benefits of native design patterns in each OS.
 
 
-<img alt="$cordovaActionSheet sous iOS" src="img/actionSheet-ios.png" width="235"/>
-<img alt="$cordovaActionSheet sous Android" src="img/actionSheet-android.png" width="235"/>
+<img alt="$cordovaActionSheet on iOS" src="img/actionSheet-ios.png" width="235"/>
+<img alt="$cordovaActionSheet on Android" src="img/actionSheet-android.png" width="235"/>
 
-On peut l'installer en utilisant les commandes&nbsp;:
+It can be installed using the following commands:
 
 ```shell
 cordova plugin add https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git --save
 cordova prepare
 ```
 
-Ensuite, la documentation nous présente un exemple d'utilisation.
+The documentation provides this example:
 
 ```javascript
 module.controller('ThisCtrl', function($cordovaActionSheet) {
@@ -106,27 +107,28 @@ module.controller('ThisCtrl', function($cordovaActionSheet) {
 });
 ```
 
-Lors des tests, l'action ouvre directement les composants natifs des OS. De ce fait, les potentiels problèmes seraient dûs à l'OS, mais il n'en est rien. L'ouverture de la fenêtre modale est correcte en termes d'implémentation aussi bien sur la sémantique, les interactions de l'utilisateur ou la gestion du focus.
+When tested, the action opens the native OS components directly. As a result, the potential problems would be due to the OS. In this case, the modal window has the right semantics, user interactions and focus management.
 
-Documentation&nbsp;: http://ngcordova.com/docs/plugins/actionSheet
+Documentation: http://ngcordova.com/docs/plugins/actionSheet
 
 
 #### $cordovaToast v2.1.1
 
-$cordovaToast est une implémentation qui diffère de la précédente. En effet, c'est une interaction native créée à partir de plusieurs sous-éléments natifs.
+$cordovaToast is an implementation that differs from the previous one. Indeed, it is a native interaction created from several native sub-elements.
 
-Toast est une implémentation native dans l'OS <span lang="en">Android</span> qui permet l'envoi de notifications courtes à l'utilisateur. Néanmoins, il n'y a pas d'implémentation équivalente directe dans <span lang="en">iOS</span>, c'est donc le créateur du plugin qui va recréer l'aspect d'une notification Toast dans <span lang="en">iOS</span>.
+Toast is a native implementation in the Android OS that allows short notifications to be sent to the user. However, there is no direct equivalent implementation in iOS, so the creator of the plugin recreated the appearance of a Toast notification in iOS.
 
-<img alt="$cordovaToast sous iOS" src="img/toast-ios.png" width="235"/>
-<img alt="$cordovaToast sous Android" src="img/toast-android.png" width="235"/>
-On peut l'installer en utilisant les commandes&nbsp;:
+<img alt="$cordovaToast on iOS" src="img/toast-ios.png" width="235"/>
+<img alt="$cordovaToast on Android" src="img/toast-android.png" width="235"/>
+
+It can be installed using the following commands:
 
 ```shell
 cordova plugin add https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git
 cordova prepare
 ```
 
-Ci-dessous, la documentation nous présente un exemple d'utilisation.
+The documentation provides this example:
 
 ```javascript
 module.controller('MyCtrl', function($scope, $cordovaSpinnerDialog) {
@@ -136,15 +138,16 @@ module.controller('MyCtrl', function($scope, $cordovaSpinnerDialog) {
   $cordovaSpinnerDialog.hide();
 });
 ```
-Lors des tests, le message est correctement énoncé dans <span lang="en">Android</span>. Un problème se pose avec la version iOS, en effet l'affichage de la notification ne déclenche aucun message dans <span lang="en">VoiceOver</span>. Ici, le problème vient de l'implémentation du plugin <span lang="en">"Toast-PhoneGap-Plugin"</span> donc il n'est pas possible de corriger via du code JavaScript, il faut réécrire une partie du code Objective-C pour envoyer une notification au lecteur d'écran <span lang="en">VoiceOver</span>.
 
-Ouvrir une anomalie ou soumettre un correctif est la meilleure alternative pour garder la maintanabilité du projet.
+During testing, the message is correctly spoken out in Android. There is a problem with the iOS version, because the notification does not trigger any messages in VoiceOver. Here, the problem comes from the implementation of the Toast-PhoneGap-Plugin plugin, so it is not possible to fix via JavaScript code, you have to rewrite part of the Objective-C code to send a notification to VoiceOver.
 
-Documentation : http://ngcordova.com/docs/plugins/toast
+Opening an issue or submitting a fix is ​​the best alternative to keep the project maintainable.
+
+Documentation: http://ngcordova.com/docs/plugins/toast
 
 ## Conclusion
 
-Cordova est utilisable pour créer une application accessible simple si le développeur respecte les règles d'accessiblité mobile. Il est important de souligner que certains motifs de conception <abbr title="Accessible Rich Internet Applications" lang="en">WAI-ARIA</abbr> ne seront pas adaptés au mobile. De manière générale, Cordova est adapté aux projets mobiles ayant un niveau technique simple, il en est de même pour l'accessiblité. En ce qui concerne les <span lang="en">plugins</span>, l'accessiblité est laissée à la liberté du créateur. Il est donc important de tester le <span lang="en">plugin</span> pour valider son implémentation.
+Cordova can be used to create a simple accessible app if the developer complies with the mobile accessibility rules. It is important to note that some ARIA design patterns will not be adapted to touch-only devices. In general, Cordova is suitable for mobile projects with a simple technical level; the same goes for accessibility. With regards to plugins, accessibility is left to the creator's good will. It is therefore important to test the plugin beforehand, in order to validate its accessibility.
 
 ## Licence
-Ce document est la propriété du Secrétariat général à la modernisation de l'action publique français (SGMAP). Il est placé sous la [licence ouverte 1.0 ou ultérieure](https://www.etalab.gouv.fr/licence-ouverte-open-licence), équivalente à une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternité, ajouter un lien vers la version originale du document disponible sur le [compte <span lang="en">Github</span> de la DInSIC](https://github.com/DISIC).
+This document is the property of the <span lang="fr">Secrétariat général à la modernisation de l'action publique</span> (SGMAP). It is placed under [Open Licence 1.0 or later (PDF, 541 kb)](http://ddata.over-blog.com/xxxyyy/4/37/99/26/licence/Licence-Ouverte-Open-Licence-ENG.pdf), equivalent to a Creative Commons BY licence. To indicate authorship, add a link to the original version of the document available on the [DINSIC's GitHub account](https://github.com/DISIC).

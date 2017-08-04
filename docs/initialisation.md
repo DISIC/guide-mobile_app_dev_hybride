@@ -1,36 +1,36 @@
+# Initialization of a project
 
-# Initialisation d'un projet 
-
-## <span lang="en">Ionic</span>
-Pour débuter, vous pouvez utiliser l'outil en ligne de commande d'<span lang="en">Ionic</span>, pour créer rapidement la structure de l'application.
+## Ionic
+To get started, you can use the command line tool from Ionic to quickly create the app structure.
 
 ```shell
 ionic start sgmapApp blank
 ```
 
-On peut auditer la page générée avec le lecteur d'écran. Le titre “Ionic Blank Starter” est bien lu par le lecteur d'écran, de plus iOS indique le niveau de titre.
+The generated page can be audited with the screen reader. The title "Ionic Blank Starter" is correctly read by the screen reader, and additionally iOS indicates the heading level.
 
 
-### Création de modules <span lang="en">AngularJs</span> de mise en accessibilité
+### Creating AngularJs modules for accessibility
 
-Pour créer une application <span lang="en">Ionic</span> accessible, nous allons créer 2 modules <span lang="en">AngularJs</span>.
-Pour rappel, le but d'un module <span lang="en">AngularJs</span> est d'être facilement réutilisable dans plusieurs applications.
+To create an accessible Ionic app, we will create 2 AngularJs modules.
+As a reminder, the purpose of an AngularJs module is to be easily reusable in several apps.
 
-Le premier module corrigera les erreurs d'accessibilité d'<span lang="en">Ionic</span>&nbsp;:
-* Mauvaise gestion des événements
-* Correction <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> (Élément focusable, contrôle de la propagation des événements [pointer-events]…)
-* Structure <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>
+The first module will fix accessibility bugs in Ionic:
 
-Le second module implémentera l'API native d'accessibilité mobile dans le contexte <span lang="en">AngularJs</span>.
-Cela permettra à toutes les applications <span lang="en">AngularJs</span>, dans un contexte hybride, d'utiliser cette API (<span lang="en">Ionic</span>, OnsenUI, <span lang="en">AngularJs+Bootstrap</span>…)
+* Poor events management
+* Correction of CSS (focusable elements, propagation control of the [pointer-events] events...)
+* HTML structure 
+
+The second module will implement the native mobile accessibility API in the AngularJs context.
+This will allow all AngularJs apps in a hybrid context to use this API (Ionic, OnsenUI, AngularJs + Bootstrap...).
 
 #### phonegap-mobile-accessibility
 
-Le second module sera implémenté à partir du plugin <span lang="en">PhoneGap mobile accessibility</span>.
-Nous pouvons grâce à ce plugin connaître les options d'accessibilité sélectionnées par l'utilisateur et le plugin peut interagir avec le lecteur d'écran.
-Plus de détails sur la page&nbsp;: https://github.com/phonegap/phonegap-mobile-accessibility
+The second module will be implemented from the PhoneGap mobile accessibility plugin.
+Thanks to this plugin we can know the accessibility options selected by the user and the plugin can interact with the screen reader.
+More details on this page: https://github.com/phonegap/phonegap-mobile-accessibility
 
-Dans un premier temps le module <span lang="en">AngularJs</span> implémentera uniquement le retour du statut du lecteur d'écran.
+Initially, the AngularJs module will implement only the screen reader status feedback.
 
 ```javascript
 angular.module('$mobileAccessibility', [])
@@ -81,7 +81,7 @@ angular.module('$mobileAccessibility', [])
       // start once for android 4.3
       MobileAccessibility.isScreenReaderRunning(screenReaderStatus);
 
-      // events doesn't seems to work on android 4.3
+      // events doesn't seem to work on android 4.3
       $window.addEventListener(MobileAccessibilityNotifications.SCREEN_READER_STATUS_CHANGED, a11yStatus, false);
     }, false);
     return true;
@@ -89,11 +89,11 @@ angular.module('$mobileAccessibility', [])
 });
 ```
 
-De cette façon, à chaque modification de l'état du lecteur, un événement AngularJs sera envoyé.
-Cet événement nous informera du comportement à adopter en fonction de l'état du lecteur d'écran.
-De plus, sur le body, la class <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> `sr-on` sera ajoutée si le lecteur d'écran est activé, et `sr-off` si il est éteint.
+This way, each time the screen reader status changes, an AngularJs event will be sent.
+This event will be used to adapt the app's behavior to the status of the screen reader.
+In addition, on the BODY element, the `sr-on` CSS class will be added if the screen reader is enabled, and `sr-off` when ​​it is off.
 
-On peut, dès lors, créer une feuille de style pour nous aider à la conception de l'application accessible.
+We can, therefore, create a style sheet to help us design the accessible app.
 
 ```css
 .sr-off .sr-on-only ,
@@ -102,53 +102,53 @@ On peut, dès lors, créer une feuille de style pour nous aider à la conception
 }
 ```
 
-Nous disposons maintenant de 2 classes <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>&nbsp;: une pour afficher un bloc uniquement lorsque le lecteur d'écran est actif (`.sr-on-only`) et la seconde seulement lorsqu'il est éteint (`.sr-off-only`)
+We now have 2 CSS classes: one to display a block only when the screen reader is active (`.sr-on-only`) and the second only when it is off (`.sr-off-only`)
 
-### <span lang="en">Profiling</span> et <span lang="en">Debugging</span> distant sur mobile
+### Profiling and remote debugging on mobile
 
-Pour développer correctement une application mobile accessible, la première règle sera de pouvoir la déboguer facilement.
-<span lang="en">Ionic</span> facilite grandement la phase de développement et de <span lang="en">debugging</span>.
-Une des options intéressantes est le <span lang="en">livereload</span> sous Android. Le <span lang="en">livereload</span> met à jour l'application à chaque modification du code en cours d'écriture.
+To develop an accessible mobile app in good conditions, the first rule is to be able to debug it easily.
+Ionic greatly facilitates the development and debugging phases.
+One of the interesting options is "livereload" on Android. The livereload option updates the app every time the code is changed.
 
 ```shell
 ionic run android -l
 ```
 
-La deuxième option permettra d'obtenir les retours de la console <span lang="en">JavaScript</span> directement dans le terminal de lancement de l'application.
+The second option will get returns from the JavaScript console directly in the app launch terminal.
 
 ```shell
 ionic run android -c
 ```
 
-De cette façon on peut facilement débugger la partie <span lang="en">JavaScript</span>. Malheureusement les outils d'<span lang="en">Ionic</span> n'accéderont pas au code <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>, c'est ici qu'interviennent les outils de déboguage distants de Safari et Chrome.
+In this way you can easily debug the JavaScript part. Unfortunately, the Ionic tools will not access the CSS code, this is where Safari and Chrome remote debugging tools come into play.
 
-Le déboguage distant accédera depuis l'ordinateur au <span lang="en">web development tools</span> de l'application mobile en cours d'exécution. On peut l'utiliser sur les plateformes Android 4.4+ et iOS 6+. Pour des versions antérieures, seuls les outils <span lang="en">Ionic</span> pourront vous aider.
+Remote debugging tools will access, from the computer, to the web development tools of the running mobile app. It can be used on Android 4.4+ and iOS 6+ platforms. For earlier versions, only Ionic tools will help.
 
-Article&nbsp;: [Testing Mobile: Emulators, Simulators And Remote Debugging](http://www.smashingmagazine.com/2014/09/testing-mobile-emulators-simulators-remote-debugging/2/)
+Article: [Testing Mobile: Emulators, Simulators And Remote Debugging](http://www.smashingmagazine.com/2014/09/testing-mobile-emulators-simulators-remote-debugging/2/)
 
 
-## <span lang="en">OnsenUI</span>
+## OnsenUI
 
-Pour débuter, vous pouvez utiliser l'outil en ligne de commande de Cordova, pour créer rapidement la structure de l'application.
+To get started, you can use Cordova's command-line tool to quickly create the app structure.
+
 ```shell
 cordova create test io.onsen.testapp TestApp
 ```
 
-Téléchargez un des modèles disponibles sur la page d'[OnsenUI](https://onsen.io/download.html)
+Download one of the [templates available on OnsenUI's website](http://components.onsen.io/patterns)
 
-Copiez ensuite le contenu du modèle téléchargé dans le répertoire créé  à
-l'étape précédente ("TestApp").
+Copy the contents of the downloaded template into the directory created at the previous step ("TestApp").
 
-Ajoutez une plateforme, Android ou iOS&nbsp;:
+Add a platform, Android or iOS:
 ```shell
 cordova platform add android
 ```
 
-Vous pourrez enfin exécuter le projet dans le simulateur, en vous plaçant dans le répertoire du projet&nbsp;:
+Finally, you can run the project in the simulator, by going to the project directory:
 ```shell
 cordova emulate
 ```
 
 
 ## Licence
-Ce document est la propriété du Secrétariat général à la modernisation de l'action publique français (SGMAP). Il est placé sous la [licence ouverte 1.0 ou ultérieure](https://www.etalab.gouv.fr/licence-ouverte-open-licence), équivalente à une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternité, ajouter un lien vers la version originale du document disponible sur le [compte <span lang="en">Github</span> de la DInSIC](https://github.com/DISIC).
+This document is the property of the <span lang="fr">Secrétariat général à la modernisation de l'action publique</span> (SGMAP). It is placed under [Open Licence 1.0 or later (PDF, 541 kb)](http://ddata.over-blog.com/xxxyyy/4/37/99/26/licence/Licence-Ouverte-Open-Licence-ENG.pdf), equivalent to a Creative Commons BY licence. To indicate authorship, add a link to the original version of the document available on the [DINSIC's GitHub account](https://github.com/DISIC).

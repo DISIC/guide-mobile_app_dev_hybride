@@ -1,52 +1,54 @@
-# Guide de développement d'applications mobiles hybrides accessibles avec Ionic et OnsenUI
+# Accessible hybrid mobile app development guide with Ionic and OnsenUI
 
-Ce guide s'adresse aux développeurs d'applications mobiles qui souhaitent connaître les techniques à utiliser pour créer des applications accessibles avec les <span lang="en">frameworks</span> <span lang="en">Ionic</span> et <span lang="en">OnsenUI</span>.
+This guide is intended for mobile apps developers who want to create accessible apps with the Ionic or OnsenUI  frameworks.
 
-## Avertissement
+## Warning
 
-Les différents tests réalisés pour étudier l'accessibilité d'<span lang="en">Ionic</span> et d'<span lang="en">OnsenUI</span> conduisent à la conclusion que ces <span lang="en">frameworks</span> ne peuvent actuellement pas être utilisés pour développer rapidement et de manière sûre une application accessible. Il est préférable de développer des applications natives, en utilisant les API d'iOS et d'Android pour atteindre un bon niveau d'accessibilité. Les éléments fournis dans ces tutoriels visent à accompagner le développeur dans l'évaluation de l'accessibilité des composants et dans la mise en oeuvre de corrections qui peut toutefois s'avérer complexe. Par ailleurs, la pérennité de telles corrections n'est pour le moment pas garantie&nbsp;: pour qu'elle le soit, les corrections devront être intégrées dans les différents <span lang="en">frameworks</span>.
-
-
-## Présentation et description d'<span lang="en">Ionic</span> et d'<span lang="en">OnsenUI</span>
-
-<span lang="en">[Ionic](http://ionicframework.com)</span> et <span lang="en">[OnsenUI](https://onsen.io)</span> sont des boîtes à outils pour développer des applications hybrides. Une application hybride est écrite en <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> et JavaScript dans un conteneur <span lang="en">WebView</span> natif et peut être exécutée sur différentes plates-formes (iOS, Android, etc.) sans changement du code. Les technologies utilisées sont [Apache Cordova](https://cordova.apache.org), <abbr title="Syntactically Awesome Style Sheets" lang="en">SASS</abbr> et <span lang="en">[AngularJs](https://angularjs.org/)</span>.
-<span lang="en">Ionic</span> et <span lang="en">OnsenUI</span> proposent des composants réutilisables, en mettant l'accent sur les performances et la facilité d'implémentation. Par ailleurs, Ionic et OnsenUI mettent à disposition des outils pour développer, tester, déployer et analyser les applications.
-
-<img src="docs/img/architecture.png" alt="architecture d'Ionic">
-
-L'architecture d'<span lang="en">Ionic</span> et d'<span lang="en">OnsenUI</span> peut être divisée en quatre couches (le schéma ci-dessus est valable à la fois pour <span lang="en">Ionic</span> et <span lang="en">OnsenUI</span>)&nbsp;:
-* La couche native, qui varie suivant l'<abbr lang="en" title="Operating System">OS</abbr>. Si nous n'utilisions que cette couche, nous aurions créé une application native pure.
-* La couche Apache Cordova. C'est ici que l'application hybride commence. Il est possible d'intégrer une application web sans couche supplémentaire, en ayant des interactions natives grâce aux plugins fournis par Cordova (Notifications, GPS, Contacts…).
-* La couche <span lang="en">AngularJs</span> nous permet ici de créer une application hybride riche, avec un système de route, vue, contrôleur…
-* La dernière couche, <span lang="en">Ionic</span> ou <span lang="en">OnsenUI</span>, apporte un ensemble de composants d'interface web reproduisant le design et les modes d'intraction natifs des composants d'iOS et d'Android (checkbox, toggle, radio, modal…).
-
-Ce tutoriel traitera de l’accessibilité dans le contexte d'une application <span lang="en">Ionic</span> ou <span lang="en">OnsenUI</span>.
-
-Pré-requis nécessaires&nbsp;:
-* Les outils&nbsp;: npm, bower, cordova, Android Studio et/ou xcode
-* Connaissance de l'environnement hybride Apache Cordova
-* Connaissance de la création d'application riche sous <span lang="en">AngularJS</span> (modules, services, directives)
-* Connaissance de Ionic et OnsenUI
-
-Pour débuter, nous verrons comment initaliser un projet et mettre en place une structure pour créer un projet d'application accessible sous <span lang="en">Ionic</span> et <span lang="en">OnsenUI</span>.
-Nous verrons ensuite les bonnes pratiques à utiliser dans l'environnement Apache Cordova et nous étudierons l'accessibilité des <span lang="en">plugins</span> Apache Cordova.
-Pour finir nous ferons l'étude de l'accessibilité des composants d'interface d'<span lang="en">Ionic</span> et d'<span lang="en">OnsenUI</span> pour aider et accompagner un développeur qui souhaiterait utiliser ces frameworks pour développer une application mobile accessible.
+The various tests carried out to study the accessibility of Ionic and OnsenUI lead to the conclusion that these frameworks cannot currently be used to quickly and safely develop an accessible app. In this respect, it is preferable to develop native apps, using the APIs of iOS and Android to achieve a satisfying level of accessibility. The elements provided in these tutorials are intended to accompany the developer in the evaluation of the components accessibility, and in the implementation of corrections, which can however prove to be complex. Moreover, the durability of such corrections is not guaranteed at the moment, unless these corrections are integrated into the frameworks.
 
 
-* [Initialisation d'un projet <span lang="en">Ionic</span> et <span lang="en">OnsenUI</span>](./docs/initialisation.md)
-* [Bonnes pratiques sous Cordova et étude d'accessibilité des <span lang="en">plugins</span> Cordova](./docs/cordova.md)
-* [Tutoriel de mise en accessibilité d'une application <span lang="en">Ionic</span>](./docs/ionic.md)
-* [Tutoriel de mise en accessibilité d'une application <span lang="en">OnsenUI</span>](./docs/onsenui.md)
-* [Synthèse des tests et correctifs proposés](./docs/synthese_tests.md)
+## Presentation and description of Ionic and OnsenUI
+
+[Ionic](http://ionicframework.com) and [OnsenUI](https://onsen.io) are toolkits to develop hybrid apps. A hybrid app is written in <abbr title = "Hypertext Markup Language">HTML</abbr>, <abbr title="Cascading Style Sheets">CSS</abbr> and JavaScript, in a native WebView container, and can be run on different platforms (iOS, Android, etc.) without changing the code. The technologies used are [Apache Cordova](https://cordova.apache.org), <abbr title = "Syntactically Awesome Style Sheets">SASS</abbr> and [AngularJs](https://angularjs.org/).
+Ionic and OnsenUI offer reusable components with a focus on performance and ease of implementation. In addition, Ionic and OnsenUI provide tools to develop, test, deploy and analyze apps.
+
+<img src="docs/img/architecture.png" alt="Ionic's architecture">
+
+The architecture of Ionic and OnsenUI can be divided into four layers (the illustration above applies to either Ionic or OnsenUI):
+
+* The native layer, which varies from <abbr title="Operating System">OS</abbr>-dependent. If we only used this layer, we would have created a pure native app.
+* The Apache Cordova layer. This is where the hybrid app begins. It is possible to integrate a web app without additional layer, having native interactions thanks to the plugins provided by Cordova (Notifications, GPS, Contacts...).
+* The AngularJs layer allows to create a rich hybrid app, with a route, view, controller...
+* The last layer, Ionic or OnsenUI, provides a set of web interface components that mimic the native designs and interaction models of iOS and Android (checkbox, toggle, radio, modal...).
+
+This tutorial will discuss accessibility in the context of an Ionic or OnsenUI app.
+
+Prerequisites:
+
+* Tools: npm, bower, cordova, Android Studio and/or XCode
+* Knowledge of Apache Cordova hybrid environment
+* Knowledge of the creation of rich aps in AngularJS (modules, services, directives)
+* Knowledge of Ionic and OnsenUI
+
+For a start, we will see how to initiate a project and set up a structure to create an accessible app project  under Ionic and OnsenUI.
+We will then see the best practices to be used in the Apache Cordova environment and we will study the accessibility of the  Apache Cordova plugins.
+Finally, we will study the accessibility of interface components from Ionic and OnsenUI, in order to help developers willing to use these frameworks to develop an accessible mobile app.
 
 
-## Guides connexes
+* [Initialization of an Ionic and of an OnsenUI project](./docs/initialisation.md)
+* [Best practices with Cordova, and study of the accessibility of Cordova plugins](./docs/cordova.md)
+* [Accessibility tutorial for an Ionic app](./docs/ionic.md)
+* [Accessibility tutorial for an OnsenUI app](./docs/onsenui.md)
+* [Synthesis of tests and proposed corrections](./docs/synthese_tests.md)
 
-Les guides suivants peuvent être consultés en complément&nbsp;:
 
-* [Guide d'audit d'applications mobiles](https://github.com/DISIC/guide-mobile_app_audit)
-* [Guide de conception d'applications mobiles accessibles](https://github.com/DISIC/guide-mobile_app_conception)
-* [Guide de développement d'applications mobiles accessibles avec les API Android et iOS](https://github.com/DISIC/guide-mobile_app_dev_natif)
+## Related documents
+
+The following guides can be consulted in addition:
+
+* [Mobile app audit guide](https://github.com/DISIC/guide-mobile_app_audit/tree/english)
+* [Design Guide for Accessible Mobile Apps](https://github.com/DISIC/guide-mobile_app_conception/tree/english)
+* [Accessible mobile app development guides with Android and iOS APIs](https://github.com/DISIC/guide-mobile_app_dev_natif/tree/english)
 
 ## Licence
-Ce document est la propriété du Secrétariat général à la modernisation de l'action publique français (SGMAP). Il est placé sous la [licence ouverte 1.0 ou ultérieure](https://www.etalab.gouv.fr/licence-ouverte-open-licence), équivalente à une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternité, ajouter un lien vers la version originale du document disponible sur le [compte <span lang="en">Github</span> de la DInSIC](https://github.com/DISIC).
+This document is the property of the <span lang="fr">Secrétariat général à la modernisation de l'action publique</span> (SGMAP). It is placed under [Open Licence 1.0 or later (PDF, 541 kb)](http://ddata.over-blog.com/xxxyyy/4/37/99/26/licence/Licence-Ouverte-Open-Licence-ENG.pdf), equivalent to a Creative Commons BY licence. To indicate authorship, add a link to the original version of the document available on the [DINSIC's GitHub account](https://github.com/DISIC).

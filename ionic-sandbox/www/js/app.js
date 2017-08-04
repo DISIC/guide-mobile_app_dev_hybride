@@ -193,9 +193,9 @@ angular.module('starter', ['ionic', 'ngCordova','a11y-ionic'])
 function DemoController(){}
 
 DemoController.prototype.archiver = function() {
-  alert('Archiver');
+  alert('Archive');
 };
 
 DemoController.prototype.supprimer = function() {
-  alert('Supprimer');
+  alert('Delete');
 };

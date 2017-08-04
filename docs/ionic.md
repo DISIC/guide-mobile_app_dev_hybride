@@ -1,17 +1,19 @@
 
+# Ionic
 
-# <span lang="en">Ionic</span>
+_(Translator's note: at the time of writing the original document, Ionic was in version 1.0.1. Some statements developed below may be outdated; however, the core approach for this tutorial remains valid)._
 
-Nous allons étudier les composants d'interface d'<span lang="en">Ionic</span> en version 1.0.1 "vanadium-vaquita" (2015-06-30).
+We will study the interface components from Ionic in version 1.0.1 "vanadium-vaquita" (2015-06-30).
 
-Il n’y a pas de documentation ou de composants dédiés à l’accessibilité dans <span lang="en">Ionic</span>, et l’une des seules références est une [anomalie](https://github.com/driftyco/ionic/issues/307) pour rendre <span lang="en">Ionic</span> accessible mais annulée car trop vague. On remarque que l'accessibilité n'est pas une priorité de l'équipe d'<span lang="en">Ionic</span> pour la version 1.0.1.
+There are no documentation or components dedicated to accessibility in Ionic, although there are [accessibility-related issues on the project repository](https://github.com/driftyco/ionic/issues?utf8=%E2%9C%93&q=%20label%3Aaccessibility%20). Note that accessibility was not a priority of the Ionic team for version 1.0.1.
 
-## Corrections spécifiques à <span lang="en">Ionic</span>
+## Fixes for Ionic
 
-### Module <span lang="en">JavaScript</span>
+### JavaScript module
 
-Les directives d'<span lang="en">Ionic</span> ne sont pas très flexibles car les <span lang="en">templates</span> ne sont pas customisables. Ce qui veut dire que toute correction devra se faire dans une nouvelle directive en recopiant la fautive.
-Dans le module et les directives, <span lang="en">Ionic</span> a renommé les fonctions angular pour simplifier l'écriture. En recopiant une directive il faudra donc migrer certaines fonctions. Voici la [liste](https://github.com/driftyco/ionic/blob/1.0.1/js/angular/main.js)&nbsp;:
+The guidelines for Ionic are not very flexible because templates are not customizable. This means that any correction must be made in a new directive by copying the faulty one.
+In the module and directives, Ionic renamed the Angular functions to simplify writing. When copying a directive, it will therefore be necessary to migrate certain functions. Here is the [list](https://github.com/driftyco/ionic/blob/v1.0.1/js/angular/main.js):
+
 * extend = angular.extend
 * forEach = angular.forEach
 * isDefined = angular.isDefined
@@ -20,29 +22,31 @@ Dans le module et les directives, <span lang="en">Ionic</span> a renommé les fo
 * jqLite = angular.element
 * noop = angular.noop
 
-Si nous copions une directive contenant `forEach`, il faudra rennommer la fonction en `angular.forEach` ([Exemple avec ion-toggle](#ion-toggle)).
+If we copy a directive containing `forEach`, we will need to rename the function to `angular.forEach` ([Example with ion-toggle](#ion-toggle)).
 
-En recopiant une directive, il faudra la renommer pour ne pas interférer avec l'ancienne. 
-Dans notre exemple, toutes les directives recopiées ont été renommées en ajoutant `-ally` (exemple: `ion-toggle` devient `ion-toggle-ally`).
+When copying a directive, it must be renamed so as not to interfere with the former one.
+In our example, all recopied directives have been renamed by adding `-ally` (example: `ion-toggle` becomes `ion-toggle-ally`).
 
-### Module <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>
+### CSS module
 
-Le module <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> corrigera les règles erronées dans <span lang="en">Ionic</span>. Elles peuvent être de plusieurs natures&nbsp;:
-* Les évémements sont bloqués par la propriété `pointer-events:none` et les clics ne sont plus transmis à l'application <span lang="en">JavaScript</span>&nbsp;;
-* Un élément <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> n'est pas focusable et il n'est donc pas utilisable par le lecteur d'écran&nbsp;;
-* Les contrastes ne sont pas suffisants et il est nécessaire de les corriger.
+The CSS module can be used to fix some accessibility issues in Ionic. They can be of several natures:
+
+* Events are blocked by the `pointer-events:none` property and clicks are no longer passed to the JavaScript app;
+* An HTML element is not focusable and therefore cannot be used by the screen reader;
+* Contrasts are not sufficient and it is necessary to enhance them.
 
 
-## Corrections d'ordre générale
+## General issues
 
-Lors de l'utilisation du framework, les erreurs relevées sont&nbsp;:
-* Les événements du lecteur d'écran sont interceptés par <span lang="en">Ionic</span> sous Android 4.3 et 4.4 empêchant toute intéraction par utilisateur.
-* Il est impossible d'utiliser le scroll avec le lecteur d'écran iOS.
+When using the framework, the errors found are:
 
-## Correctifs appliqués pour interpréter les événements du lecteur d'écran Android
+* Screen reader events are intercepted by Ionic under Android 4.3 and 4.4, preventing user interaction;
+* It is impossible to scroll with the iOS screen reader.
 
-Lors des tests sous <span lang="en">Android</span> 4.3 et <span lang="en">Android</span> 4.4, il est impossible de cliquer ou de changer l’état d'une case à cocher avec <span lang="en">talkback</span>. Les événements sont interceptés par <span lang="en">Ionic</span> pour réduire le délai de latence des 300ms. http://blog.ionic.io/hybrid-apps-and-the-curse-of-the-300ms-delay/
-Il faut donc désactiver cette interception en rajoutant l’attribut `data-tap-disabled="true"` sur la balise `body`.
+## Patches applied to interpret Android screen reader events
+
+When testing with Android 4.3 and Android 4.4, you cannot click or change the status of a checkbox with TalkBack. Events are intercepted by Ionic to reduce the latency of 300ms ([explanations here](http://blog.ionic.io/hybrid-apps-and-the-curse-of-the-300ms-delay/)).
+This interception must be thus disabled by adding the `data-tap-disabled="true"` attribute to the `<body>` tag.
 
 ```html
 <body ng-app="starter" data-tap-disabled="true">
@@ -50,13 +54,13 @@ Il faut donc désactiver cette interception en rajoutant l’attribut `data-tap-
 </body>
 ```
 
-La désactivation du délai de <span lang="en">tap</span> rend l'application beaucoup plus lente lorsque le lecteur d'écran est inactif. Il faut donc corriger cette impression de latence.
+Disabling the tap delay makes the app much slower when the screen reader is idle. This feeling of latency must therefore be corrected.
 
 
-### Correction de l'impression de latence sous <span lang="en">Ionic</span>
+### Fixing the latency feeling in Ionic
 
-L'une des forces de l'implémentation hybride est de pouvoir accéder à une partie de l'API native depuis notre application écrite en <span lang="en">JavaScript</span>. On peut par exemple connaître l'état du lecteur d'écran pour corriger une erreur inhérente au framework <span lang="en">Ionic</span>.
-Le but est de modifier l'attribut <span lang="en">`data-tap-disabled`</span> en fonction du lecteur d'écran.
+One of the strengths of the hybrid implementation is that we can partly access to the native API from our JavaScript app. For example, you can fetch the screen reader status to fix a bug inherent to the Ionic framework.
+The purpose is to change the `data-tap-disabled` attribute depending on the screen reader.
 
 ```javascript
 angular.module('a11y-ionic', ['$mobileAccessibility'])
@@ -76,15 +80,15 @@ angular.module('a11y-ionic', ['$mobileAccessibility'])
 })
 ```
 
-De cette façon, si le lecteur d'écran est allumé, les événements `click` ne seront pas bloqués par <span lang="en">Ionic</span> et on pourra changer l'état des <span lang="en">checkbox</span>. Et lorsque le lecteur d'écran sera éteint, le délai de 300 ms sera supprimé pour donner une impression d'application native.
+This way, if the screen reader is turned on, `click` events will not be blocked by Ionic and you can change the status of checkboxes. And when the screen reader is turned off, the 300 ms delay will be removed to give a native app feeling.
 
-## Correction du <span lang="en">scrolling</span> sous iOS
+## Fixing scrolling on iOS
 
-<span lang="en">Ionic</span> fut créé lorsque les événements `scroll` natifs web n'étaient pas implémentés. Ils ont dû pour cela réimplémenter les événements `scroll` en <span lang="en">JavaScript</span>. Depuis, Android 4.1 a implémenté les événements `scroll` natifs, mais les WebViews iOS ne supportent pas cette implémentation. Donc les scrolls VoiceOver dans iOS sont interceptés par <span lang="en">Ionic</span>. Cela empêche de défiler correctement vers le bas avec un lecteur d'écran.
+Ionic was created when web native `scroll` events were not implemented yet. They had to re-implement the `scroll` events in JavaScript. Since then, Android 4.1 has implemented native `scroll` events, but iOS WebViews do not support this implementation. So the VoiceOver scrolls in iOS are intercepted by Ionic. This prevents properly scrolling down with a screen reader.
 
-Lorsque l'on désactive le <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>, le défilement fonctionne correctement. Il faut donc trouver la classe puis la propriété en erreur pour corriger cette anomalie.
+When the CSS are turned off, the scrolling function works correctly. It is therefore necessary to find the class and then the faulty property to fix this bug.
 
-Cette recherche peut se révéler très fastidieuse voire impossible sans l'aide du déboguage distant. Avec des essais successifs, on peut se rendre compte que les classes `.scroll-content` et `.pane` sont en cause, il faut revenir en position statique. De plus en ajoutant les classes `.platform-ios` et `.sr-on`, nous pouvons faire cette correction uniquement pour la plateforme iOS ayant un lecteur d'écran actif.
+This search can be very tedious or even impossible without the help of remote debugging. With successive tests, it can be found out that the `.scroll-content` and `.pane` classes are involved, it is necessary to return to the static position. Additionally, by adding the `.platform-ios` and `.sr-on` classes, we can make this correction only for the iOS platform with an active screen reader.
 
 ```css
 .platform-ios.sr-on .pane,
@@ -93,7 +97,7 @@ Cette recherche peut se révéler très fastidieuse voire impossible sans l'aide
 }
 ```
 
-En ajoutant cette correction, il est nécessaire de faire un ajustement de style pour le <span lang="en">header</span>.
+By adding this correction, it is necessary to make a style adjustment for the header.
 
 ```css
 .platform-ios.sr-on .scroll-content{
@@ -105,42 +109,46 @@ En ajoutant cette correction, il est nécessaire de faire un ajustement de style
 }
 ```
 
-De cette façon, le défilement dans <span lang="en">iOS</span> fonctionne correctement. Néanmoins il est possible que d'autres régressions de style soient présentes dans des cas particuliers d'utilisation de <span lang="en">Ionic</span>. Le mieux serait une correction faite par l'équipe d'<span lang="en">Ionic</span> qui a une meilleure vue d'ensemble du projet.
+In this way, scrolling in iOS works correctly. However, it is possible that other style regressions may occur in particular cases when using Ionic. The best course of action would be a fix by the Ionic team, which has a better overview of the project.
 
 
 ## ion Forms
 
-Documentation des champs de formulaire Ionic&nbsp;: http://ionicframework.com/docs/components/#forms
+[Ionic Components Documentation](http://ionicframework.com/docs/components/#overview)
 
-<span lang="en">Ionic</span> fournit plusieurs styles d'<span lang="en">input</span>&nbsp;:
-* <span lang="en">Placeholder Labels</span>
-* <span lang="en">Inline Labels</span>
-* <span lang="en">Stacked Labels</span>
-* <span lang="en">Floating Labels</span>
-* <span lang="en">Inset Forms</span>
-* <span lang="en">Inset Inputs</span>
-* <span lang="en">Input Icons</span>
-* <span lang="en">Header Inputs</span>
+Ionic provides several input types:
 
-Pour les composants <span lang="en">`Placeholder Labels, Inset Forms, Inset Inputs, Input Icons, Header Inputs`</span>, les erreurs relevées sont&nbsp;:
-* L'utlisation de <span lang="en">placeholder</span> n'est pas une alternative au label, en effet le <span lang="en">placeholder</span> n'est plus visible dès que l'on commence à remplir le champ&nbsp;;
-* Le label est vide.
+* Placeholder Labels
+* Inline Labels
+* Stacked Labels
+* Floating Labels
+* Inset Forms
+* Inset Inputs
+* Input Icons
+* Header Inputs
 
-Pour le composant <span lang="en">`Floating Labels`</span>, l'erreur relevée est&nbsp;:
-* L'étiquette de champ et son champ associé ne sont pas accolés. L'étiquette n'est pas visible.
+For the `Placeholder Labels`, `Inset Forms`, `Insert Inputs`, `Input Icons`, `Header Inputs` components, the reported errors are:
 
-Pour les composants <span lang="en">`Inline Labels`</span> et <span lang="en">`Stacked Labels`</span>, l'erreur relevée est&nbsp;:
-* Absence de l'attribut `for` sur le <span lang="en">label</span> et l'`id` correspondant sur l'<span lang="en">input</span>.
+* The use of placeholder is not a replacement for the label, as the  placeholder disappears when user starts filling the field;
+* The label is empty.
 
-### Composant non accessible
+For the `Floating Labels` component, the error is:
 
-Les composants <span lang="en">`Placeholder Labels, Inset Forms, Inset Inputs, Input Icons, Header Inputs, Floating Labels`</span> ne peuvent pas être corrigés sans changer complètement l'aspect voulu par <span lang="en">Ionic</span>.
+* The field label and its associated field are not adjacent. The label is not visible.
 
-### Correctifs appliqués
+For the `Inline Labels` and `Stacked Labels` components, the error is:
 
-Pour corriger les problèmes d'accessibilité sur les composants <span lang="en">`Inline Labels`</span> et <span lang="en">`Stacked Labels`</span>, nous avons ajouté l'attribut `for` sur le <span lang="en">label</span> et l'<span lang="en">id</span>.
+* Absence of the `for` attribute on the label and of the corresponding `id` on the input field.
 
-#### Correction de l'<span lang="en">input Inline Labels</span>
+### Inaccessible Components
+
+Placeholder Labels, Inset Forms, Inset Inputs, Input Icons, Header Inputs, Floating Labels cannot be fixed without completely changing their appearance, as intended by Ionic.
+
+### Applied patches
+
+To fix accessibility issues on the `Inline Labels` and `Stacked Labels` components, we added the `for` attribute on the label and the corresponding `id` on the field.
+
+#### Fix for the Inline Labels input
 
 <img src="img/inline-label.png" alt="Inline Labels">
 
@@ -154,7 +162,7 @@ Pour corriger les problèmes d'accessibilité sur les composants <span lang="en"
 ```
 
 
-#### Correction de l'<span lang="en">input Stacked Labels</span>
+#### Fix for the Stacked Labels input
 
 <img src="img/stacked-label.png" alt="Stacked Labels">
 
@@ -169,16 +177,17 @@ Pour corriger les problèmes d'accessibilité sur les composants <span lang="en"
 
 ## ion-checkbox
 
-Documentation de <span lang="en">ion-checkbox</span> dans <span lang="en">Ionic</span>: http://ionicframework.com/docs/1.0.1/api/directive/ionCheckbox/
+[Documentation for ion-checkbox in Ionic](http://ionicframework.com/docs/v1/1.3.2/api/directive/ionCheckbox/)
 
-<img src="img/ion-checkbox.png" alt="une liste de 3 éléments ion-checkbox">
+<img src="img/ion-checkbox.png" alt="a list of 3 ion-checkbox elements">
 
-Pour le composant ion-checkbox l'erreur relevée est&nbsp;:
-* La <span lang="en">checkbox</span> n’est pas <span lang="en">focusable</span> avec le lecteur d’écran.
+For the ion-checkbox component the error is:
 
-### Correctifs appliqués
+* The checkbox is not focusable with the screen reader.
 
-On va forcer la <span lang="en">checkbox</span> en `display:block` puis la rendre visible uniquement au lecteur d’écran.
+### Applied patches
+
+We'll force the checkbox into `display:block` and make it visible only to the screen reader.
 
 ```css
 body .checkbox.checkbox-input-hidden input {
@@ -197,22 +206,23 @@ body .checkbox.checkbox-input-hidden input {
 }
 ```
 
-On peut effectuer les tests de restitution sous <span lang="en">iOS</span> et <span lang="en">Android</span>. La prise de focus fonctionne bien, le <span lang="en">label</span> est énoncé par le lecteur d’écran, son type (“case à cocher”) et son état (“non coché”).
+You can run the restitution tests under iOS and Android. Focusing works well, the label is rendered by the screen reader, its type ("checkbox") and its status ("unchecked") too.
 
 ## ion-toggle
 
-Documentation de <span lang="en">ion-toggle</span> dans <span lang="en">Ionic</span>: http://ionicframework.com/docs/1.0.1/api/directive/ionToggle/
+[Documentation for ion-toggle in Ionic](http://ionicframework.com/docs/v1/1.3.2/api/directive/ionToggle/)
 
-<img src="img/ion-toggle.png" alt="une liste de 3 éléments ion-toggle">
+<img src="img/ion-toggle.png" alt="a list of 3 ion-toggle elements">
 
-Pour le composant ion-toggle les erreurs relevées sont&nbsp;:
-* L'<span lang="en">input checkbox</span> n’est pas <span lang="en">focusable</span> avec le lecteur d’écran.
-* Le label est vide.
-* Les événements <span lang="en">`click`</span> ne sont pas envoyé sous <span lang="en">Android 5.0</span>.
+For the ion-toggle component the reported errors are:
 
-### Correctifs appliqués
+* The input checkbox is not focusable with the screen reader.
+* The label is empty.
+* `click` events are not sent in Android 5.0.
 
-On va forcer la <span lang="en">checkbox</span> en `display:block` puis la rendre visible uniquement au lecteur d’écran.
+### Applied patches
+
+We'll force the checkbox into `display: block` and make it visible only to the screen reader.
 
 ```css
 body .toggle input{
@@ -231,7 +241,7 @@ body .toggle input{
 }
 ```
 
-Nous voyons aussi que la structure <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> n’est pas correcte&nbsp;: le <span lang="en">`label`</span> est vide. Malheureusement le <span lang="en">template</span> de la directive n’est pas modifiable, nous devons recopier la directive sous un autre nom pour la modifier&nbsp;:
+It can be observed that the HTML structure is not correct: the `<label>` tag is empty. Unfortunately, the template of the directive is not editable, we need to copy the directive under a different name to modify it:
 
 ```javascript
 .directive('ionToggleAlly', [
@@ -311,8 +321,8 @@ function($timeout, $ionicConfig) {
 }])
 ```
 
-Avec ce nouveau <span lang="en">template</span>, le label n'est plus vide. Mais en effectuant les tests sous Android 5.0 la `checkbox` ne change pas d'état.
-En effet les événements sont bloqués par la propriété <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> `pointer-events:none;` sur l'item <span lang="en">toggle</span>. Il faut donc remettre à la valeur par défaut.
+With this new template, the label is no longer empty. But when testing in Android 5.0 the `checkbox` state does not change.
+In fact, events are blocked by the `pointer-events:none;` CSS property on the toggle item. It is therefore necessary to reset to the default value.
 
 ```css
 .item-toggle{
@@ -320,23 +330,24 @@ En effet les événements sont bloqués par la propriété <abbr title="Cascadin
 }
 ```
 
-De cette manière les événements `click` sont correctement interceptés.
+In this way click events are correctly intercepted.
 
 ## ion-radio
 
-Documentation de <span lang="en">ion-radio</span> dans <span lang="en">Ionic</span>: http://ionicframework.com/docs/1.0.1/api/directive/ionRadio/
+[Documentation for ion-radio in Ionic](http://ionicframework.com/docs/v1/1.3.2/api/directive/ionRadio/)
 
-<img src="img/ion-radio.png" alt="une liste de 4 éléments ion-radio">
+<img src="img/ion-radio.png" alt="a list of 4 ion-radio elements">
 
-Pour le composant ion-toggle les erreurs relevées sont&nbsp;:
-* L'<span lang="en">input radio</span> n'est pas focusable sous <span lang="en">Android 5.0</span>.
-* L'icône est focusable sous <span lang="en">Android</span> 5.0
+For the ion-radio component the reported errors are:
 
-### Correctifs appliqués
+* The radio input is not focusable in Android 5.0.
+* The icon can be focused in Android 5.0
 
-Cette fois-ci, une erreur apparaît lors de l'activation de l'<span lang="en">`input radio`</span> sous <span lang="en">Android 5.0</span>, on ne peut pas changer l'état. Pour diagnostiquer l'erreur, il faut partir d'une version sans modification de style, et retirer l'intégralité des classes <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>. En ajoutant une à une les classes, nous pouvons ainsi trouver celle qui comporte la propriété <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> qui pose problème.
+### Applied patches
 
-L'erreur vient de la propriété `left: -9999px;` sur l'<span lang="en">`input`</span> qui est mal interprétée par <span lang="en">Talkback</span> dans <span lang="en">Android</span> 5.0. On va donc changer la propriété à 0 et cacher l'input aux lecteurs d'écran par précaution.
+This time, an error appears when activating the radio input in Android 5.0, the state cannot be changed. To diagnose the error, it is necessary to start from a version with no style modification, and to remove all the CSS classes. By adding classes one by one, we can find the one that has the offending CSS property.
+
+The error comes from the `left: -9999px;` property on the `input` element, that is misinterpreted by TalkBack in Android 5.0. We will therefore change the property to 0 and hide the input to the screen reader as a precaution.
 
 ```css
 .item-radio input {
@@ -354,7 +365,8 @@ L'erreur vient de la propriété `left: -9999px;` sur l'<span lang="en">`input`<
 }
 ```
 
-L'icône présente pour marquer l'état reste focusable mais n'est pas vocalisée sous <span lang="en">Android</span> 5.0. L'état étant déjà vocalisé par l'<span lang="en">`input`</span>, il est préférable de la cacher complètement avec la propriété `aria-hidden="true"` dans la directive.
+The icon displayed to indicate the status remains focusable but is not spoken out in Android 5.0. Since the status is already indicated by the `input`, it is best to hide it completely with the ` aria-hidden="true"` property in the directive.
+
 
 
 ```javascript
@@ -405,63 +417,67 @@ L'icône présente pour marquer l'état reste focusable mais n'est pas vocalisé
 
 ## $ionicGesture
 
-Nous nous basons ici sur les critères présents dans la proposition d'extension du RGAA pour les mobiles/tactiles (voir https://github.com/DISIC/referentiel-mobile-tactile/blob/master/refentiel-mobile-tactile-liste-criteres.md ).
+We refer here to the [List of criteria RGAA&nbsp;3, specific to mobile/tactile platforms](https://github.com/DISIC/referentiel-mobile-tactile/blob/en/mobile-touch-guidelines-criteria.md).
 
 
-Le critère 14.3 comporte le test suivant&nbsp;:
+[Criterion 14.3](https://github.com/DISIC/referentiel-mobile-tactile/blob/en/mobile-touch-guidelines-criteria.md#143-for-each-gesture-based-interaction-triggering-an-action-is-the-action-triggered-appropriately) includes the following test:
 
-> Test 14.3.1&nbsp;: Chaque interaction  gestuelle déclenchant une action respecte-t-elle ces conditions&nbsp;?
->   * l'action est déclenchée uniquement à la fin de l'interaction gestuelle&nbsp;;
->   * l'action n'est pas déclenchée si l'élément déclencheur perd le focus.
+> Test 14.3.1: Does each gesture-based interaction triggering an action meet these conditions?
+>  * The action is triggered only at the end of the gesture-based interaction;
+>  * The action is not triggered if the triggering element loses focus.
 
 
-Le premier test invalide plusieurs gestes&nbsp;:
- * Le geste <span lang="en">on-hold</span> va déclencher l'action pendant l'appui et non à la fin de l'interaction&nbsp;;
- * Le geste <span lang="en">on-touch</span> va déclencher l'action avant la fin de touchend ou mouseup&nbsp;;
- * Les actions <span lang="en">on-drag, on-drag-*</span> vont déclencher l'action avant la fin de touchend ou mouseup.
+The first test invalidates several gestures:
 
-De la même manière le deuxième test invalide plusieurs gestes&nbsp;:
- * Les gestes <span lang="en">on-swipe, on-swipe-*</span> peuvent être déclenchés même si le focus est perdu&nbsp;;
- * Le geste <span lang="en">on-release</span> est déclenché peu importe où le focus se trouve.
+ * The "on-hold" gesture will trigger the action during the press and not at the end of the interaction;
+ * The  "on-touch" gesture will trigger the action before the end of `touchend` or `mouseup`;
+ * The "on-drag", "on-drag-*" actions will trigger the action before the end of `touchend` or `mouseup`.
 
-Il reste 2 gestes valides&nbsp;:
- * <span lang="en">on-tap</span> pour les appuis courts&nbsp;;
- * <span lang="en">on-double-tap</span> pour les doubles appuis.
+Similarly, the second test invalidates several gestures:
+
+ * "on-swipe", "on-swipe-*" gestures can be triggered even if the focus is lost;
+ * The "on-release" gesture is triggered no matter where the focus is.
+
+There are 2 valid gestures left:
+
+ * "on-tap" for short presses;
+ * "on-double-tap" for double presses.
 
 
 
 ## $ionicModal
 
-Documentation de <span lang="en">$ionicModal</span> dans <span lang="en">Ionic</span>: http://ionicframework.com/docs/1.0.1/api/service/$ionicModal/
+[Documentation for $ionicModal in Ionic](http://ionicframework.com/docs/v1/1.3.2/api/service/$ionicModal/)
 
-La fenêtre modale <span lang="en">Ionic</span> affiche du contenu temporaire à l'utilisateur. On peut aussi bien afficher des actions, du contenu ou un formulaire à l'intérieur.
+The Ionic modal window displays temporary content to the user. You can also display actions, content or a form inside.
 
-Pour le composant $ionicModal les erreurs relevées sont&nbsp;:
-* L'utilisateur utilisant un lecteur d'écran ne peut pas interagir avec les éléments à l'intérieur de la modale.
-* Le focus n'est pas renvoyé sur le premier élément à l'ouverture.
-* Le focus peut sortir de la fenêtre modale en cours d'ouverture.
-* À la fermeture le focus ne revient pas sur l'élément ayant permis d'ouvrir la fenêtre.
-* La touche Echap ne ferme pas la fenêtre.
-* Absence de l'attribut role="dialog".
-* Absence de label pour la modale.
+For the $ionicModal component the reported errors are:
+
+* The user using a screen reader cannot interact with the elements inside the modal window;
+* Focus is not set on the first element inside the modal window when it is opened;
+* Focus can go outside of the opened modal window;
+* When the modal window is closed, the focus does not return to the element that opened the window;
+* The Escape key does not close the window;
+* No `role="dialog"` attribute;
+* No title for the modal window.
 
 
-L'attribut <span lang="en">`data-tap-disabled="true"`</span> ne permet pas de désactiver la réduction du délai de 300 ms. La désactivation du <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> et des propriétés <span lang="en">pointer-event</span> sont sans effet. Il est donc impossible pour un utilisateur avec un lecteur d'écran actif d'utiliser les fenêtres modales <span lang="en">Ionic</span> et aucune correction simple n'a été mise en évidence.
+The `data-tap-disabled="true"` attribute cannot be used to disable the 300 ms delay reduction. Disabling the CSS and the `pointer-event` properties have no effect. It is therefore impossible for a user with an active screen reader to use the Ionic modal windows and no simple solutions have been found.
 
-Il est préférable d'utiliser une fenêtre modale déjà accessible. <span lang="en">AngularJs</span> étant un <span lang="en">framework</span> assez flexible, on peut ajouter aussi bien une fenêtre modale <span lang="en">jQuery</span>, <span lang="en">React</span> ou <span lang="en">AngularJS</span>.
+It is preferable to use a modal window that is already accessible. AngularJs being a fairly flexible framework, it is possible to use a modal from jQuery, React or AngularJS.
 
-Le même problème se posera pour $ionicPopover et $ionicActionSheet.
+The same problem will arise for $ionicPopover and $ionicActionSheet.
 
 
 ## Conclusion
 
-Lors de ce tutoriel, nous remarquons bien que <span lang="en">Ionic</span> n'a pas été conçu pour être accessible. La première raison est sûrement l'interception des événements </span>click</span> pour réduire le délai de 300ms, qui empêche toutes les actions avec un lecteur d'écran. Ensuite, nous nous rendons compte qu'aucun test n'a été fait avec un lecteur d'écran VoiceOver, car il est impossible de défiler dans l'application avec un lecteur d'écran. Sur l'ensemble des composants, seulement une petit partie sera effectivement corrigeable (ion Forms: Inline Labels et Stacked Labels, ion-checkbox, ion-toggle, ion-radio) ce qui limite l'intérêt de l'utilisation d'<span lang="en">Ionic</span> pour créer une application accessible.
+In this tutorial, we can observe that Ionic _(T.N.: as per version 1.0.1)_ was not designed to be accessible. The primary reason is certainly the click event interception to reduce the 300ms delay, which prevents all actions with a screen reader. Secondly, it seems rather obvious that no testing has been performed with VoiceOver, since it's impossible to scroll through the app with this screen reader on. Out of all the components, only a few can be actually fixed (in ion Forms: `Inline Labels` and `Stacked Labels`, `ion-checkbox`, `ion-toggle`, `ion-radio`,) which limits the interest of using Ionic to create an accessible app.
 
-Si vous souhaitez faire une application <span lang="en">iOS</span>, il est préférable d'attendre que [l'anomalie sur le défilement](https://github.com/driftyco/ionic/issues/4100) soit corrigée, il est possible d'utiliser <span lang="en">Ionic</span> mais cela risque d'être très chronophage en l'état et de provoquer des régressions ou des comportements inattendus.
+If you want to code an iOS app, it's safer to wait until [the 3-finger scroll issue](https://github.com/driftyco/ionic-v1/issues/17) is fixed. It is possible to use Ionic but this can be very time consuming and cause unexpected regressions or behaviors.
 
-Si vous souhaitez faire une application <span lang="en">Android</span>, il est très important de tester l'application sur <span lang="en">Android</span> > 5 et <span lang="en">Android</span> 4.4. Il peut y avoir beaucoup de comportements différents entre les deux versions OS, en effet la <span lang="en">WebView</span> n'est pas la même et l'accessibilité peut comporter des anomalies sur une seule des versions.
+If you want to code an Android app, it's very important to test the app on Android 5 and 4.4. There may be many different behaviors between the two OS versions, because the WebView is not the same and accessibility may be broken on only one version.
 
-De manière générale, <span lang="en">Ionic 1.0.1</span> n'est pas recommandable pour créer une application accessible. Il est préférable d'utiliser Cordova et de créer sa propre application. Nous pourrions éventuellement travailler sans le module <span lang="en">JavaScript Ionic</span> et charger seulement la feuille <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>, mais il faudrait prendre garde à la structure <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>, aux propriétés <span lang="en">`pointer-events:none`</span> et aux problèmes éventuels de contrastes.
+In general, we do not recommend Ionic 1.0.1 for creating an accessible app. It is preferable to use Cordova and create your own app. It is still possible to work without the Ionic JavaScript  module and load only the CSS. Nevertheless, greatest care must be taken with the HTML structure, the `pointer-events:none`, and potential contrast issues.
 
 ## Licence
-Ce document est la propriété du Secrétariat général à la modernisation de l'action publique français (SGMAP). Il est placé sous la [licence ouverte 1.0 ou ultérieure](https://www.etalab.gouv.fr/licence-ouverte-open-licence), équivalente à une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternité, ajouter un lien vers la version originale du document disponible sur le [compte <span lang="en">Github</span> de la DInSIC](https://github.com/DISIC).
+This document is the property of the <span lang="fr">Secrétariat général à la modernisation de l'action publique</span> (SGMAP). It is placed under [Open Licence 1.0 or later (PDF, 541 kb)](http://ddata.over-blog.com/xxxyyy/4/37/99/26/licence/Licence-Ouverte-Open-Licence-ENG.pdf), equivalent to a Creative Commons BY licence. To indicate authorship, add a link to the original version of the document available on the [DINSIC's GitHub account](https://github.com/DISIC).

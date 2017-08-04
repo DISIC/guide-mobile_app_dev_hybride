@@ -1,58 +1,64 @@
 
+# OnsenUI
 
-# <span lang="en">OnsenUI</span>
+_(Translator's note: at the time of writing the original document, OnsenUI was in version 1.3.11. Some statements developed below may be outdated; however, the core approach for this tutorial remains valid)._
 
-Nous allons étudier les composants d'interface d'<span lang="en">OnsenUI</span> version 1.3.11 (2015-09-28).
+We will study the user interface components of OnsenUI version 1.3.11 (2015-09-28).
 
-Il n’y a pas de documentation ou de composants dédiés à l’accessibilité dans <span lang="en">OnsenUI</span>.
+There are no documentation or components dedicated to accessibility in OnsenUI.
 
-On remarque que l'accessibilité n'est pas une priorité de l'équipe d'<span lang="en">OnsenUI</span> actuellement.
+Note that accessibility is not a priority of the OnsenUI team at this time.
 
-## Corrections générales
+## General issues
 
-Lors de l'utilisation du framework, l'erreur suivante a été relevée&nbsp;:
-* Les événements du lecteur d'écran sont interceptés par <span lang="en">OnsenUI</span> sous Android 4.3 et 4.4 empêchant toute interaction par l'utilisateur.
+When using the framework, the following error was noted:
 
-## Correctifs appliqués pour interpréter les événements du lecteur d'écran Android
+* Screen reader events are intercepted by OnsenUI on Android 4.3 and 4.4, preventing user interaction.
 
-Lors des tests sous <span lang="en">Android</span> 4.3 et <span lang="en">Android</span> 4.4, il est impossible de cliquer ou de changer l’état d'une case à cocher avec <span lang="en">talkback</span>. Les événements sont interceptés par <span lang="en">OnsenUI</span> pour réduire le délai de latence des 300ms&nbsp;: <q lang="en">thanks to the fastclick library, there is no 300ms delay when detecting the event.</q>
+## Patches applied to interpret Android screen reader events
+
+When testing with Android 4.3 and Android 4.4, you cannot click or change the status of a checkbox with TalkBack. Events are intercepted by OnsenUI to reduce the latency of the 300ms:
+> Thanks to the fastclick library, there is no 300ms delay when detecting the event.
 
 
-### Correction de l'impression de latence sous <span lang="en">OnsenUI</span>
+### Fixing the latency feeling in OnsenUI
 
-<span lang="en">OnsenUI</span> ne propose pas d'attribut ou de fonction permettant au développeur de désactiver l'utilisation de la libraire fastclick responsable des dysfonctionnements avec les lecteurs d'écran. Il est ainsi difficile de corriger le problème d'interception de clics.
-Une possibilité est de la désactiver totalement dans onsenui.js&nbsp;:
+OnsenUI does not provide an attribute or function that allows the developer to disable the use of the fastclick library responsible for malfunctions with screen readers. This makes it difficult to fix the issues with click events.
+One option is to disable it completely in onsenui.js:
+
 ```javascript
   // window.addEventListener('load', function() {
   // FastClick.attach(document.body);
   // }, false);
 ```
 
-Une correction plus pérenne serait d'ajouter à OnsenUI un attribut "disable-tap" puis d'utiliser le module MobileAccessibility de Cordova pour détecter la présence d'un lecteur d'écran et d'ajuster l'état de "disable-tap" en fonction de l'absence ou de la présence d'un lecteur d'écran lors de l'exécution de l'application.
+A more permanent fix would be to add a "disable-tap" attribute to OnsenUI; then, use Cordova's MobileAccessibility module to detect the presence of a screen reader; and finally, adjust the disable-tap state, whether a screen reader is on or off when running the app.
 
 
-## Zones de saisie
+## Input fields
 
-<span lang="en">OnsenUI</span> fournit plusieurs styles de zones de saisie (<span lang="en">input</span>)&nbsp;:
-* <span lang="en">Underbar Text Input</span>
-* <span lang="en">Transparent Text Input</span>
-* <span lang="en">Search Input</span>
-* <span lang="en">Textarea</span>
-* <span lang="en">Transparent Textarea</span>
+OnsenUI provides several types of input fields:
+
+* Underbar Text Input
+* Transparent Text Input
+* Search Input
+* Textarea
+* Transparent Textarea
 
 
-Les erreurs relevées sont les suivantes&nbsp;:
-* L'utlisation de <span lang="en">placeholder</span> n'est pas une alternative au label. En effet le <span lang="en">placeholder</span> n'est plus visible dès que l'on commence à remplir le champ&nbsp;;
-* Le label est vide.
-* Absence de l'attribut `for` sur le <span lang="en">label</span> et l'`id` correspondant sur l'<span lang="en">input</span>.
+The following issues are encountered:
 
-### Composants non accessibles
+* The use of placeholder is not a replacement for the label, as the  placeholder disappears when user starts filling the field;
+* The label is empty.
+* Absence of the `for` attribute on the label and of the corresponding `id` on the input field.
 
-Les composants de zones de saisie ne peuvent pas être corrigés sans changer complètement l'aspect voulu par <span lang="en">OnsenUI</span>.
+### Inaccessible Components
 
-### Correctifs appliqués
+Input components cannot be fixed without completely changing their appearance, as intended by OnsenUI.
 
-Pour corriger les problèmes d'accessibilité sur les composants de zones de saisie, nous avons ajouté un label lié à l'élément "input"&nbsp;:
+### Applied patches
+
+To fix accessibility issues on input components, we have added a label linked to the `INPUT` element:
 ```html
   <div class="text-input">
     <label for="z1">Text input:</label>
@@ -61,15 +67,17 @@ Pour corriger les problèmes d'accessibilité sur les composants de zones de sai
 ```
 
 
-## Case à cocher
+## Checkbox
 
-Pour le composant case à cocher, l'erreur relevée est&nbsp;:
-* La restitution par les lecteurs d'écran n'est pas correcte, à cause de la structure du code de l'implémentation proposée ("input" imbriqué dans l'élément "label").
+For the checkbox component, the issue found is:
+
+* The rendering by screen readers is not correct, because of the structure of the code of the proposed implementation (`INPUT` nested inside the `LABEL` element).
 
 
-### Correctifs appliqués
+### Applied patches
 
-Pour que le composant soit correctement restitué par les lecteurs d'écran, il faudrait un code de la forme&nbsp;:
+For the component to be correctly rendered by the screen readers, it would require a code of the form:
+
 ```html
   <div class="checkbox">
     <label for="cb2" class="checkbox">Option</label>
@@ -78,16 +86,17 @@ Pour que le composant soit correctement restitué par les lecteurs d'écran, il 
   </div>
 ```
 
-Mettre en oeuvre une telle implémentation demande de revoir significativement la structure de code proposée par OnsenUI.
+Implementing such a modification requires a significant review of the code structure proposed by OnsenUI.
 
 ## Switch
 
-Pour le composant switch, l'erreur relevée est&nbsp;:
-* Le label est mal restitué.
+For the switch component, the issue is:
 
-### Correctifs appliqués
+* The label is incorrectly rendered.
 
-Comme précédemment, le code devrait être de la forme&nbsp;:
+### Applied patches
+
+As previously, the code should be of the form:
 ```html
   <div class="switch">
      <label for="s1">Bouton</label>
@@ -96,17 +105,19 @@ Comme précédemment, le code devrait être de la forme&nbsp;:
   </div>
 ```
 
-Mettre en oeuvre une telle implémentation demande de revoir significativement la structure de code proposée par OnsenUI.
+Implementing such a modification requires a significant review of the code structure proposed by OnsenUI.
 
 
-## Bouton radio
+## Radio button
 
-Pour le composant bouton radio, l'erreur relevée est&nbsp;:
-* Le label est mal restitué.
+For the radio button component, the error found is:
 
-### Correctifs appliqués
+* The label is incorrectly rendered.
 
-Comme précédemment, le code devrait être de la forme&nbsp;:
+### Applied patches
+
+As previously, the code should be of the form:
+
 ```html
   <div class="radio-button">
     <label for="rb1">Option 1</label>
@@ -115,57 +126,61 @@ Comme précédemment, le code devrait être de la forme&nbsp;:
   </div>
 ```
 
-Mettre en oeuvre une telle implémentation demande de revoir significativement la structure de code proposée par OnsenUI.
+Implementing such a modification requires a significant review of the code structure proposed by OnsenUI.
+
+
+## Gesture Detection (ons-gesture-detector)
+
+We refer here to the [List of criteria RGAA&nbsp;3, specific to mobile/tactile platforms](https://github.com/DISIC/referentiel-mobile-tactile/blob/en/mobile-touch-guidelines-criteria.md).
 
 
 
-## Détection des gestes (ons-gesture-detector)
+[Criterion 14.3](https://github.com/DISIC/referentiel-mobile-tactile/blob/en/mobile-touch-guidelines-criteria.md#143-for-each-gesture-based-interaction-triggering-an-action-is-the-action-triggered-appropriately) includes the following test:
 
-Nous nous basons ici sur [les critères présents dans la proposition d'extension du RGAA pour les mobiles/tactiles](https://github.com/DISIC/referentiel-mobile-tactile/blob/master/refentiel-mobile-tactile-liste-criteres.md).
-
-Le critère 14.3 comporte le test suivant&nbsp;:
-
-> Test 14.3.1&nbsp;: Chaque interaction  gestuelle déclenchant une action respecte-t-elle ces conditions&nbsp;?
->   * l'action est déclenchée uniquement à la fin de l'interaction gestuelle&nbsp;;
->   * l'action n'est pas déclenchée si l'élément déclencheur perd le focus.
+> Test 14.3.1: Does each gesture-based interaction triggering an action meet these conditions?
+>  * The action is triggered only at the end of the gesture-based interaction;
+>  * The action is not triggered if the triggering element loses focus.
 
 
-Le premier test invalide plusieurs gestes&nbsp;:
- * Le geste <span lang="en">hold</span> va déclencher l'action pendant l'appui et non à la fin de l'interaction (il faudra veiller à l'utiliser en combinaison avec <span lang="en">release</span>)&nbsp;;
- * Le geste <span lang="en">touch</span> va déclencher l'action avant la fin de touchend ou mouseup&nbsp;;
- * Les actions <span lang="en">drag, dragleft, dragright, dragup, dragdown</span> vont déclencher l'action avant la fin de touchend ou mouseup.
+The first test invalidates several gestures:
 
-De la même manière le deuxième test invalide plusieurs gestes&nbsp;:
- * Les gestes <span lang="en">swipe, swipeleft, swiperight, swipeup, swipedown</span> peuvent être déclenchés même si le focus est perdu&nbsp;;
- * Le geste <span lang="en">release</span> est déclenché peu importe où le focus se trouve.
+ * The "hold" gesture will trigger the action during the press and not at the end of the interaction (it will be necessary to use it in combination with `release`);
+ * The "touch" gesture will trigger the action before the end of `touchend` or `mouseup`;
+ * `drag`, `dragleft`, `dragright`, `dragup`, `dragdown` gestures  will trigger action before the end of `touchend` or `mouseup`.
 
-L'utilisation de ces geste sera donc à éviter.
+Similarly, the second test invalidates several gestures:
 
-## Fenêtre modale
+ * `swipe`, `swipeleft`, `swiperight`, `swipeup`, `swipedown` gestures can be triggered even if focus is lost;
+ * The  `release` gesture is triggered no matter where the focus is.
 
-La fenêtre modale <span lang="en">OnsenUI</span> permet d'afficher du contenu temporaire (actions, texte, formulaire, etc.)
+The use of these gestures should therefore be avoided.
 
-Pour le composant fenêtre modale (ons-modal) les erreurs relevées sont&nbsp;:
-* L'utilisateur de lecteur d'écran ne peut pas interagir avec les éléments contenus dans la modale.
-* Le focus n'est pas renvoyé sur le premier élément à l'ouverture.
-* Le focus peut sortir de la fenêtre modale en cours d'ouverture.
-* À la fermeture le focus ne revient pas sur l'élément ayant permis d'ouvrir la fenêtre.
-* La touche Echap ne ferme pas la fenêtre.
-* Absence de l'attribut role="dialog".
-* Absence de label pour la modale.
+## Modal window
+
+The OnsenUI modal window  allows to display temporary content (actions, text, form, etc.).
+
+For the modal window component (`ons-modal`) the issues found are:
+
+* The screen reader user cannot interact with the elements contained in the modal;
+* Focus is not set on the first element inside the modal window when it is opened;
+* Focus can go outside of the opened modal window;
+* When the modal window is closed, the focus does not return to the element that opened the window;
+* The Escape key does not close the window;
+* No `role="dialog"` attribute;
+* No title for the modal window.
 
 
-Il est préférable d'utiliser une fenêtre modale déjà accessible. <span lang="en">AngularJs</span> étant un <span lang="en">framework</span> assez flexible, on peut ajouter aussi bien une fenêtre modale <span lang="en">jQuery</span>, <span lang="en">React</span> ou <span lang="en">AngularJS</span>.
+It is preferable to use a modal window that is already accessible. AngularJs being a fairly flexible framework, it is possible to use a modal from jQuery, React or AngularJS.
 
-Le même problème se posera pour le composant "popover".
+The same problem will arise for the "popover" component.
 
 ## Conclusion
 
-Lors de ce tutoriel, nous remarquons bien que <span lang="en">OnsenUI</span> n'a pas été conçu pour être accessible. La première raison est sûrement l'interception des événements <span>click</span> pour réduire le délai de 300ms, qui empêche toutes les actions avec un lecteur d'écran. Ensuite, nous nous rendons compte qu'aucun test n'a été fait avec le lecteur d'écran TalkBack ou VoiceOver car un grand nombre de composants sont restitués de manière incomplète ou incorrecte.
+In this tutorial, we can observe that OnsenUI _(T.N.: as per version 1.3.11)_ was not designed to be accessible. The primary reason is certainly the click event interception to reduce the 300ms delay, which prevents all actions with a screen reader. Secondly, it seems rather obvious that no testing has been performed with VoiceOver or TalkBack on, since a large number of components are rendered incompletely or incorrectly.
 
-Si vous souhaitez faire une application <span lang="en">Android</span>, il est très important de tester l'application sur <span lang="en">Android</span> > 5 et <span lang="en">Android</span> 4.4. Il peut y avoir beaucoup de comportements différents entre les deux versions OS, en effet la <span lang="en">WebView</span> n'est pas la même et l'accessibilité peut comporter des anomalies sur une seule des versions.
+If you want to code an Android app, it's very important to test the app on Android 5 and 4.4. There may be many different behaviors between the two OS versions, because the WebView is not the same and accessibility may be broken on only one version.
 
-De manière générale, <span lang="en">OnsenUI</span> n'est pas recommandable pour créer une application accessible. Il est préférable d'utiliser Cordova et de créer sa propre application.
+In general, we do not recommend OnsenUI 1.3.11 for creating an accessible app. It is preferable to use Cordova and create your own app. 
 
 ## Licence
-Ce document est la propriété du Secrétariat général à la modernisation de l'action publique français (SGMAP). Il est placé sous la [licence ouverte 1.0 ou ultérieure](https://www.etalab.gouv.fr/licence-ouverte-open-licence), équivalente à une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternité, ajouter un lien vers la version originale du document disponible sur le [compte <span lang="en">Github</span> de la DInSIC](https://github.com/DISIC).
+This document is the property of the <span lang="fr">Secrétariat général à la modernisation de l'action publique</span> (SGMAP). It is placed under [Open Licence 1.0 or later (PDF, 541 kb)](http://ddata.over-blog.com/xxxyyy/4/37/99/26/licence/Licence-Ouverte-Open-Licence-ENG.pdf), equivalent to a Creative Commons BY licence. To indicate authorship, add a link to the original version of the document available on the [DINSIC's GitHub account](https://github.com/DISIC).
